@@ -21,6 +21,9 @@
 .vue-select {
   border: none;
 }
+.table__dd-list {
+  display: block;
+}
 .vue-select-header {
   border: 1px solid #c4c4c4;
   border-radius: 4px;
