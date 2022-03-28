@@ -18,6 +18,7 @@
               :lazy="false"
               :max="firstSlider.max"
               :min="firstSlider.min"
+              :format="{decimals: 2}"
             ></r-slider>
 
             <div class="table__dd-list-values">
@@ -34,7 +35,7 @@
             <div class="table__dd-list-btns">
               <div @click="clearFilter(firstSlider, secondSlider)">Clear</div>
               <button
-                @click="setFilter(firstSlider, 'ODx', $refs.dd1)"
+                @click="setFilter(firstSlider, $refs.dd1)"
                 class="btn-primary sm color-white"
               >
                 Apply
@@ -77,7 +78,7 @@
             <div class="table__dd-list-btns">
               <div @click="clearFilter(firstSlider, secondSlider)">Clear</div>
               <button
-                @click="setFilter(secondSlider, 'IDx', $refs.dd2)"
+                @click="setFilter(secondSlider, $refs.dd2)"
                 class="btn-primary sm color-white"
               >
                 Apply
@@ -178,9 +179,6 @@ export default {
     },
     cTab: {
       type: Array
-    },
-    tabChange: {
-      type: Function
     }
   },
 
@@ -193,11 +191,7 @@ export default {
 
   data() {
     return {
-      loadingStatus: this.loading,
       priceStatus: null,
-      data: this.fetchData,
-      items: this.tItems,
-      currentTab: this.cTab,
 
       firstSlider: {
         tick: 'ODx',
@@ -224,60 +218,63 @@ export default {
   },
 
   mounted() {
-    if (this.loading) {
-      this.setVal(this.firstSlider, 'ODx')
-      this.setVal(this.secondSlider, 'IDx')
+    if (this.$props.loading) {
+      this.setAllValues()
     }
   },
 
   updated() {
-    this.data = this.fetchData
-    this.items = this.tItems
-    this.currentTab = this.cTab
-    this.loadingStatus = this.loading
-    
     if (this.$refs.dd1.isExpanded) {
       this.$refs.dd1.toggle()
     } else if (this.$refs.dd2.isExpanded) {
       this.$refs.dd2.toggle()
     }
+  },
 
-    if (!this.$props.tabChange) {
-      this.setVal(this.firstSlider, 'ODx')
-      this.setVal(this.secondSlider, 'IDx')
-    } else {
-      return
+  watch: {
+    cTab: {
+      deep: true,
+      handler() {
+        setTimeout(() => {this.setAllValues()}, 100)
+      }
     }
   },
 
   methods: {
-    setVal(slider, val) {
-      let elements = []
+    setVal(slider) {
+      const elements = []
       elements.length = 0
 
-      this.items.forEach((item) => {
-        elements.push(item[val])
+      this.$props.tItems.forEach((item) => {
+        elements.push(item[slider.tick])
       })
 
-      slider.min = Math.min(...elements) 
-      slider.max = Math.max(...elements) 
-      slider.value[0] = Math.min(...elements)
-      slider.value[1] = Math.max(...elements)
+      const min = Math.min(...elements)
+      const max = Math.max(...elements)
+
+      slider.min = min
+      slider.max = max
+      slider.value[0] = min
+      slider.value[1] = max
+    },
+
+    setAllValues() {
+      this.setVal(this.firstSlider)
+      this.setVal(this.secondSlider)
     },
   
-    setFilter(slider, val, dd) {
-      return this.$emit('setFilter', {
+    setFilter(slider, dd) {
+      this.$emit('setFilter', {
         slider: slider,
-        val: val,
         dd: dd
       })
     },
   
     clearFilter(...sliders) {
-      sliders[0].value[0] = sliders[0].min
-      sliders[0].value[1] = sliders[0].max
-      sliders[1].value[0] = sliders[1].min
-      sliders[1].value[1] = sliders[1].max
+      sliders.forEach(slider => {
+        slider.value[0] = slider.min
+        slider.value[1] = slider.max
+      })
 
       this.$emit('clearFilter', {
         sliders: sliders,
@@ -307,19 +304,17 @@ export default {
         .then((data) => (this.priceOptionsRates = data.info.rate))
       
       if (this.priceStatus) {
-        const values = [...this.data].map((el, idx, arr) => {
+        [...this.$props.fetchData].map((el, idx, arr) => {
           return (arr[idx].fields['Price/m'] = (
             el.fields['Price/m'] * this.priceOptionsRates
           ).toFixed(2))
         })
-  
-        return this.data = values
       }
     },
   
     convert() {
       const convertValues = (val) => {
-        const values = [...this.data].map((el) => {
+        [...this.$props.fetchData].map((el) => {
           el.fields['IDx'] = 
             val == true 
               ? el.fields['IDx'] * 25.4 
@@ -333,7 +328,6 @@ export default {
               ? el.fields['Weight/m'] / 2.205 
               : el.fields['Weight/m'] * 2.205
         })
-        this.data = values
       }
 
       if (this.radio === '0') {

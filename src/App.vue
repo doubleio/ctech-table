@@ -30,14 +30,13 @@
                 :fetchData="fetchItems"
                 :tItems="filterItems"
                 :price="price"
-                @updatePrice="getPrice"
                 :loading="loadingStatus"
                 :cTab="currentTab"
                 :tabNames="tabNames"
-                :tabChange="tabChange"
+                @updatePrice="getPrice"
                 @setFilter="handleFilterValues"
                 @parameters="getParameters"
-                @clearFilter="resetFilter"
+                @clearFilter="handleFilterTabs"
               ></app-filters>
 
               <div>
@@ -98,6 +97,7 @@
               @prevPage="prevPage"
               @nextPage="nextPage"
               @goToPage="goToPage"
+              ref="paginationItem"
             ></app-pagination>
           </template>
 
@@ -159,7 +159,7 @@ export default {
   mounted() {
     this.getParameters()
   },
-  
+
   methods: {
     async init() {
       const res = await fetch(api(this.offset), {
@@ -202,17 +202,16 @@ export default {
     },
 
     handleFilterValues(value) {
-      // TODO: fix filter function
-      this.resetFilter()
+      this.handleFilterTabs()
 
       const slider = value.slider
-      const sliderValue = value.val
+      const sliderValue = value.slider.tick
 
       const result = this.filterItems.filter((item) => {
         return (
-          Math.ceil(item[sliderValue])
+          Math.floor(item[sliderValue])
             >= slider.value[0] &&
-          Math.ceil(item[sliderValue])
+          Math.floor(item[sliderValue])
             <= slider.value[1]
         )
       })
@@ -223,42 +222,29 @@ export default {
     },
 
     handleFilterTabs() {
+      this.getAllItems()
       const result = this.filterItems.filter(
         (item) => this.currentTab.includes(item['Product'])
       )
       return this.filterItems = result
     },
 
-    resetFilter() {
-      this.getAllItems()
-      this.handleFilterTabs()
-    },
-
     tabChange(val) {
-      this.getAllItems()
       this.goToPage(1)
-
       this.currentSortType = null
-      var idx = this.currentTab.indexOf(val)
+
+      let idx = this.currentTab.indexOf(val)
 
       if (idx !== -1) {
         this.currentTab.length === 1 ? '' : this.currentTab.splice(idx, 1)
       } else {
         this.currentTab.push(val)
       }
-
+      
       this.handleFilterTabs()
     },
 
     setCurrentTab() {
-      this.setTabNames()
-      if (this.tabNames) {
-        this.tabChange(this.tabNames[0].product)
-        sessionStorage.setItem('loaded', true)
-      }
-    },
-
-    setTabNames() {
       const seen = {}
       const result = []
       let j = 0
@@ -279,6 +265,11 @@ export default {
 
       this.tabNames = result
       sessionStorage.setItem('ProductNames', JSON.stringify(result))
+      
+      if (result.length > 0) {
+        sessionStorage.setItem('loaded', true)
+        return this.tabChange(this.tabNames[0].product)
+      }
     },
   },
 }
