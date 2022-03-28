@@ -1,6 +1,6 @@
 <template>
   <div class="table__links">
-    <a href="#" class="table__tabs-item v2 w-inline-block"
+    <a href="/about" class="table__tabs-item v2 w-inline-block"
       ><img
         src="https://assets.website-files.com/61b8adc853887c7e8a0e1d78/61f300b4125cfceba68271fb_table-about.svg"
         loading="lazy"

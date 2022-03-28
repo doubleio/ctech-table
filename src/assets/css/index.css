@@ -163,6 +163,8 @@ a.table__tabs-item.v2 {
 	background-image: none;
 }
 
+/* =========== Tab icons =========== */
+
 .table__tabs-item[data-shape="Round"] {
 	background-image: url('https://uploads-ssl.webflow.com/61b8adc853887c7e8a0e1d78/61f300b41fb86f2c19576c17_table-round.svg');
 }
@@ -197,3 +199,5 @@ a.table__tabs-item.v2 {
 .table__tabs-item.active[data-shape="Oval"] {
   background-image: url('https://uploads-ssl.webflow.com/61b8adc853887c7e8a0e1d78/61f300b4433e0a46d94aa0ea_table-oval-white.svg');
 }
+
+/* =========== /Tab icons =========== */

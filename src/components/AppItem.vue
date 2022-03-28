@@ -1,6 +1,6 @@
 <template>
     <div 
-      v-for="item in pData" 
+      v-for="item in data" 
       :key="item" 
       class="table__tb-item"
     >
@@ -8,20 +8,20 @@
         <div>{{ item['Product'] }}</div>
       </div>
       <div class="table__th-item">
-        <div>{{ (item['IDx']).toFixed(2) }} {{ parameterOptions.val1 }}</div>
+        <div>{{ (item['IDx']).toFixed(2) }} {{ parameters.val1 }}</div>
       </div>
       <div class="table__th-item">
-        <div>{{ (item['ODx']).toFixed(2) }} {{ parameterOptions.val1 }}</div>
+        <div>{{ (item['ODx']).toFixed(2) }} {{ parameters.val1 }}</div>
       </div>
       <div class="table__th-item">
-        <div>{{ priceFormat(item['Price/m'], price) }}</div>
+        <div>{{ priceFormat(item['Price/m'], currency) }}</div>
       </div>
       <div class="table__th-item">
-        <div>{{ (item['Weight/m']).toFixed(2) }} {{ parameterOptions.val2 }}</div>
+        <div>{{ (item['Weight/m']).toFixed(2) }} {{ parameters.val2 }}</div>
       </div>
-      <div class="table__th-item center btn">
+      <a href="#modal=open" class="table__th-item center btn">
         <div>Get a quote</div>
-      </div>
+      </a>
     </div>
 </template>
 
@@ -38,20 +38,5 @@
         type: Object
       }
     },
-
-    updated() {
-      this.pData = this.data
-      this.price = this.currency
-      this.parameterOptions = this.parameters
-    },
-
-    
-    data() {
-      return {
-        pData: this.data,
-        price: this.currency,
-        parameterOptions: this.parameters
-      }
-    }
   }
 </script>
