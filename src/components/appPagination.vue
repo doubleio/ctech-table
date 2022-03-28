@@ -12,13 +12,11 @@
     <div class="table__pagination-numbers">
       <div
         class="table__numbers-btn"
-        v-for="item in Math.ceil(items.length / perPage)"
+        v-for="item in pagination(page, paginatedNumbers)"
         :key="item"
         @click="$emit('goToPage', item)"
         :class="item === page ? 'active' : ''"
-      >
-        {{ item }}
-      </div>
+      >{{ item }}</div>
     </div>
     <div class="table__arrow" @click="$emit('nextPage')" :disabled="lastPage">
       <div>Next</div>
@@ -49,6 +47,37 @@ export default {
     },
     page: {
       type: Number
+    },
+    rowCount: {
+      type: Number
+    },
+  },
+
+  computed: {
+    paginatedNumbers() {
+      return Math.ceil(this.$props.items.length / this.$props.perPage)
+    },
+  },
+
+  methods: {
+    pagination(currentPage, lastPage, delta = 1) {
+      const range = Array(lastPage).fill().map((_, index) => index + 1)
+
+      return range.reduce((pages, page) => {
+        if (page === 1 || page === lastPage) {
+          return [...pages, page]
+        }
+
+        if (page - delta <= currentPage && page + delta >= currentPage) {
+          return [...pages, page]
+        }
+
+        if (pages[pages.length - 1] !== '...') {
+          return [...pages, '...']
+        }
+
+        return pages
+      }, [])
     }
   }
 }

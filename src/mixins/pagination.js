@@ -3,7 +3,6 @@ export const pagination = {
     return {
       isFirstPage: true,
       isLastPage: false,
-
       perPage: 100,
       page: 1,
     }
@@ -15,7 +14,7 @@ export const pagination = {
         ? this.isFirstPage = true 
         : this.isFirstPage = false
       
-      val === Math.ceil(this.tableItems.length / this.perPage)
+      val === Math.ceil(this.filterItems.length / this.perPage)
         ? this.isLastPage = true
         : this.isLastPage = false
     }
@@ -23,18 +22,18 @@ export const pagination = {
 
   computed: {
     paginatedData() {
-      let tempData = this.tableItems
+      let tempData = this.filterItems
       tempData = tempData.slice(
         (this.page - 1) * this.perPage,
         this.page * this.perPage
       )
       return tempData
-    },
+    }
   },
 
   methods: {
     nextPage() {
-      if (this.page !== Math.ceil(this.tableItems.length / this.perPage)) {
+      if (this.page !== Math.ceil(this.filterItems.length / this.perPage)) {
         this.page += 1
       }
     },
@@ -46,7 +45,11 @@ export const pagination = {
     },
 
     goToPage(numPage) {
-      this.page = numPage
+      if (numPage === '...') {
+        return
+      } else {
+        this.page = numPage
+      }
     },
   }
 }
