@@ -13,6 +13,6 @@ git init
 git add -A
 git commit -m 'deploy'
 
-git push -f git@github.com:YNDmitry/ctech-table.git master:gh-pages
+git push -f git@github.com:doubleio/ctech-table.git master:gh-pages
 
 cd -
