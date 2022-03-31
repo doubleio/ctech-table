@@ -155,16 +155,13 @@ import {
   VueCollapsiblePanelGroup,
   VueCollapsiblePanel,
 } from '@dafcoe/vue-collapsible-panel'
-import VueSelect from 'vue-next-select'
-import 'vue-next-select/dist/index.min.css'
 import rSlider from '@vueform/slider'
 
 export default {
   components: {
     VueCollapsiblePanelGroup,
     VueCollapsiblePanel,
-    VueSelect,
-    rSlider,
+    rSlider
   },
 
   props: {
@@ -191,7 +188,7 @@ export default {
 
   data() {
     return {
-      priceStatus: null,
+      priceStatus: false,
 
       firstSlider: {
         tick: 'ODx',
@@ -209,7 +206,6 @@ export default {
       oldPrice: 'NZD',
       price: 'NZD',
       priceOptions: ['NZD', 'AUD', 'USD', 'EUR'],
-      priceOptionsRates: null,
       radio: '0',
 
       parameter: 'mm',
@@ -264,9 +260,10 @@ export default {
     },
   
     setFilter(slider, dd) {
-      this.$emit('setFilter', {
-        slider: slider,
-        dd: dd
+      dd.toggle()
+
+      return this.$emit('setFilter', {
+        slider: slider
       })
     },
   
@@ -301,14 +298,16 @@ export default {
           this.priceStatus = res.ok
           return res.json()
         })
-        .then((data) => (this.priceOptionsRates = data.info.rate))
-      
-      if (this.priceStatus) {
-        [...this.$props.fetchData].map((el, idx, arr) => {
+        .then((data) => data.info.rate)
+
+      if (this.priceStatus !== false) {
+        this.priceStatus = false
+        const result = [...this.$props.fetchData].map((el, idx, arr) => {
           return (arr[idx].fields['Price/m'] = (
-            el.fields['Price/m'] * this.priceOptionsRates
+            el.fields['Price/m'] * currencyRes
           ).toFixed(2))
         })
+        return result
       }
     },
   

@@ -19,7 +19,11 @@
       <div class="table__th-item">
         <div>{{ (item['Weight/m']).toFixed(2) }} {{ parameters.val2 }}</div>
       </div>
-      <a href="#modal=open" class="table__th-item center btn">
+      <a 
+        href="#modal=open" 
+        class="table__th-item center btn" 
+        @click="setQueryParams(item)"
+      >
         <div>Get a quote</div>
       </a>
     </div>
@@ -38,5 +42,18 @@
         type: Object
       }
     },
+
+    methods: {
+      setQueryParams(item) {
+        let query = {
+          'product': item['Product'],
+          'shape': item['Shape'],
+          'diameter': (item['IDx']).toFixed(2),
+          'wall': (item['ODx']).toFixed(2),
+        }
+
+        return sessionStorage.setItem('params', JSON.stringify(query))
+      }
+    }
   }
 </script>

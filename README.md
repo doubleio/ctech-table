@@ -1,7 +1,11 @@
-# Vue 3 + Vite
+# C-TECH Table
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+To upload changes, enter **npm run deploy**.
 
-## Recommended IDE Setup
 
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+## Plugins
+
+1. For sliders, use vueform/slider - <https://github.com/vueform/slider>
+
+2. Dropdown vue-collapsible-panel - <https://github.com/dafcoe/vue-collapsible-panel>
+

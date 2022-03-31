@@ -29,10 +29,8 @@
               <app-filters
                 :fetchData="fetchItems"
                 :tItems="filterItems"
-                :price="price"
                 :loading="loadingStatus"
                 :cTab="currentTab"
-                :tabNames="tabNames"
                 @updatePrice="getPrice"
                 @setFilter="handleFilterValues"
                 @parameters="getParameters"
@@ -46,38 +44,10 @@
             </div>
             <div class="table__content-info">
 
-              <div class="table__th">
-                <div class="table__th-item"><div>Product</div></div>
-                <div
-                  class="table__th-item sort"
-                  :class="sortType('IDx') ? 'checked' : ''"
-                  @click="sortItemsUp('IDx')"
-                >
-                  <div>Internal Diameter ({{ parameters.val1 }})</div>
-                </div>
-                <div
-                  class="table__th-item sort bottom"
-                  :class="sortType('ODx') ? 'checked' : ''"
-                  @click="sortItemsDown('ODx')"
-                >
-                  <div>Wall ({{ parameters.val1 }})</div>
-                </div>
-                <div
-                  class="table__th-item sort bottom"
-                  :class="sortType('Price/m') ? 'checked' : ''"
-                  @click="sortItemsDown('Price/m')"
-                >
-                  <div>Price Range/m</div>
-                </div>
-                <div
-                  class="table__th-item sort bottom"
-                  :class="sortType('Weight/m') ? 'checked' : ''"
-                  @click="sortItemsDown('Weight/m')"
-                >
-                  <div>Weight per meter</div>
-                </div>
-                <div class="table__th-item center"><div>Action</div></div>
-              </div>
+              <app-sort
+                :filterItems="filterItems"
+                :parameters="parameters"
+              ></app-sort>
 
               <div class="table__tb">
                 <app-item
@@ -101,12 +71,7 @@
             ></app-pagination>
           </template>
 
-          <div v-else style="display: flex; align-items: center; height: 100%">
-            <img
-              src="./assets/images/animation_500_kz0e525l.gif"
-              style="margin: 0px auto"
-            />
-          </div>
+          <app-loader v-else></app-loader>
         </div>
       </div>
     </div>
@@ -118,10 +83,11 @@ import AppPagination from '@/components/AppPagination.vue'
 import AppLinks from '@/components/AppLinks.vue'
 import AppItem from '@/components/AppItem.vue'
 import AppFilters from '@/components/AppFilters.vue'
+import AppSort from '@/components/AppSort.vue'
+import AppLoader from '@/components/AppLoader.vue'
 
 import { pagination } from './mixins/pagination'
-import { sort } from './mixins/sort'
-import { api } from './main'
+import { api } from './api/airtable-request'
 
 export default {
   components: {
@@ -129,9 +95,11 @@ export default {
     AppLinks,
     AppItem,
     AppFilters,
+    AppSort,
+    AppLoader
   },
 
-  mixins: [pagination, sort],
+  mixins: [pagination],
 
   data() {
     return {
@@ -201,22 +169,19 @@ export default {
       }
     },
 
-    handleFilterValues(value) {
+    handleFilterValues(e) {
       this.handleFilterTabs()
-
-      const slider = value.slider
-      const sliderValue = value.slider.tick
+      const slider = e.slider
+      const sliderValue = e.slider.tick
 
       const result = this.filterItems.filter((item) => {
         return (
-          Math.floor(item[sliderValue])
+          item[sliderValue]
             >= slider.value[0] &&
-          Math.floor(item[sliderValue])
+          item[sliderValue]
             <= slider.value[1]
         )
       })
-
-      value.dd.toggle()
 
       return this.filterItems = result
     },
@@ -226,6 +191,7 @@ export default {
       const result = this.filterItems.filter(
         (item) => this.currentTab.includes(item['Product'])
       )
+
       return this.filterItems = result
     },
 
@@ -249,7 +215,7 @@ export default {
       const result = []
       let j = 0
 
-      for(let i = 0; i < this.filterItems.length; i++) {
+      for (let i = 0; i < this.filterItems.length; i++) {
         const item = this.filterItems[i]
         const itemType = typeof(item)
         const key = `${itemType}_${item['Product']}`
@@ -276,6 +242,5 @@ export default {
 </script>
 
 <style>
-@import url('@vueform/slider/themes/default.css');
 @import url('https://assets.website-files.com/61b8adc853887c7e8a0e1d78/css/ctech-dev.3236b9fe5.css');
 </style>
