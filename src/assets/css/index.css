@@ -167,10 +167,12 @@ a.table__tabs-item.v2 {
 
 /* =========== Tab icons =========== */
 
-.table__tabs-item[data-shape="Round"] {
+.table__tabs-item[data-shape="Round"],
+.table__tabs-item[data-shape="Boom"] {
 	background-image: url('https://uploads-ssl.webflow.com/61b8adc853887c7e8a0e1d78/61f300b41fb86f2c19576c17_table-round.svg');
 }
-.table__tabs-item.active[data-shape="Round"] {
+.table__tabs-item.active[data-shape="Round"],
+.table__tabs-item.active[data-shape="Boom"] {
 	background-image: url('https://uploads-ssl.webflow.com/61b8adc853887c7e8a0e1d78/61f300b47a97ea0499142800_table-round-white.svg');
 }
 
@@ -199,14 +201,16 @@ a.table__tabs-item.v2 {
 .table__tabs-item[data-shape="Oval Flat"],
 .table__tabs-item[data-shape="Oval Taper"],
 .table__tabs-item[data-shape="Pointed Oval"],
-.table__tabs-item[data-shape="Flat Oval"] {
+.table__tabs-item[data-shape="Flat Oval"],
+.table__tabs-item[data-shape="Aerofoil"] {
   background-image: url('https://uploads-ssl.webflow.com/61b8adc853887c7e8a0e1d78/61f300b4a26e66678eab422b_table-oval.svg');
 }
 .table__tabs-item.active[data-shape="Oval"],
 .table__tabs-item.active[data-shape="Oval Flat"],
 .table__tabs-item.active[data-shape="Oval Taper"],
 .table__tabs-item.active[data-shape="Pointed Oval"],
-.table__tabs-item.active[data-shape="Flat Oval"] {
+.table__tabs-item.active[data-shape="Flat Oval"],
+.table__tabs-item.active[data-shape="Aerofoil"] {
   background-image: url('https://uploads-ssl.webflow.com/61b8adc853887c7e8a0e1d78/61f300b4433e0a46d94aa0ea_table-oval-white.svg');
 }
 
