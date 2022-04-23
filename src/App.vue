@@ -234,7 +234,14 @@ export default {
       
       if (result.length > 0) {
         sessionStorage.setItem('loaded', true)
-        return this.tabChange(this.tabNames[0].product)
+        this.tabNames.forEach((el) => {
+          const tabItem = el.shape
+          const re = new RegExp(location.pathname.split('/product-type/')[1].split('-tube')[0], 'ig')
+
+          if (tabItem.search(re) !== -1) {
+            this.tabChange(el.product)
+          }
+        })
       }
     },
   },
