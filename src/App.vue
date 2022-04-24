@@ -240,6 +240,8 @@ export default {
 
           if (tabItem.search(re) !== -1) {
             this.tabChange(el.product)
+          } else {
+            this.tabChange(this.tabNames[0].product)
           }
         })
       }
