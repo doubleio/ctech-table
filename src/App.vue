@@ -234,11 +234,14 @@ export default {
       
       if (result.length > 0) {
         sessionStorage.setItem('loaded', true)
+
         this.tabNames.forEach((el) => {
           const tabItem = el.shape
-          const re = new RegExp(location.pathname.split('/product-type/')[1].split('-tube')[0], 'ig')
+          const re = location.pathname !== '/' 
+            ? new RegExp(location.pathname.split('/product-type/')[1].split('-tube')[0], 'ig') 
+            : ''
 
-          if (tabItem.search(re) !== -1) {
+          if (tabItem.search(re) !== -1 && location.pathname !== '/') {
             this.tabChange(el.product)
           } else {
             this.tabChange(this.tabNames[0].product)
