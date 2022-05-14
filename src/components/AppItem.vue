@@ -11,7 +11,7 @@
         <div>{{ (item['IDx']).toFixed(2) }} {{ parameters.val1 }}</div>
       </div>
       <div class="table__th-item">
-        <div>{{ (item['ODx']).toFixed(2) }} {{ parameters.val1 }}</div>
+        <div>{{ (item['Wall']).toFixed(2) }} {{ parameters.val1 }}</div>
       </div>
       <div class="table__th-item">
         <div>{{ priceFormat(item['Price/m'], currency) }}</div>
