@@ -1,5 +1,5 @@
 const apiKey = 'keyEP1Ky8tJP7sodr'
-const table = 'appHkRvpA0XNVEQ8f/table_sheet'
+const table = 'appHkRvpA0XNVEQ8f/table_all'
 
 export const api = (offset) =>
   `https://api.airtable.com/v0/${table}` +

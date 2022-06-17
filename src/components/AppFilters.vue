@@ -8,34 +8,35 @@
         <template #content class="table__dd-list">
           <div class="table__dd-list list">
             <div>
-              From {{ (firstSlider.value[0]).toFixed(2) }} {{ parameter }} to
-              {{ (firstSlider.value[1]).toFixed(2) }} {{ parameter }}
+              From {{ (wallSlider.value[0]).toFixed(2) }} {{ parameter }} to
+              {{ (wallSlider.value[1]).toFixed(2) }} {{ parameter }}
             </div>
 
             <r-slider
-              v-model="firstSlider.value"
+              v-model="wallSlider.value"
               :tooltips="false"
               :lazy="false"
-              :max="firstSlider.max"
-              :min="firstSlider.min"
+              :max="wallSlider.max"
+              :min="wallSlider.min"
               :format="{decimals: 2}"
+              :step="0.01"
             ></r-slider>
 
             <div class="table__dd-list-values">
               <div class="table__values-item">
                 <span>min</span>
-                <div>{{ (firstSlider.value[0]).toFixed(2) }} ({{ parameter }})</div>
+                <div>{{ (wallSlider.value[0]).toFixed(2) }} ({{ parameter }})</div>
               </div>
               <div class="table__values-sep"></div>
               <div class="table__values-item">
                 <span>max</span>
-                <div>{{ (firstSlider.value[1]).toFixed(2) }} ({{ parameter }})</div>
+                <div>{{ (wallSlider.value[1]).toFixed(2) }} ({{ parameter }})</div>
               </div>
             </div>
             <div class="table__dd-list-btns">
-              <div @click="clearFilter(firstSlider, secondSlider)">Clear</div>
+              <div @click="clearFilter(wallSlider, IDSlider, ODSlider)">Clear</div>
               <button
-                @click="setFilter(firstSlider, $refs.dd1)"
+                @click="setFilter(wallSlider, $refs.dd1)"
                 class="btn-primary sm color-white"
               >
                 Apply
@@ -52,33 +53,33 @@
         <template #content class="table__dd-list">
           <div class="table__dd-list list">
             <div>
-              From {{ (secondSlider.value[0]).toFixed(2) }} {{ parameter }} to
-              {{ (secondSlider.value[1]).toFixed(2) }} {{ parameter }}
+              From {{ (IDSlider.value[0]).toFixed(2) }} {{ parameter }} to
+              {{ (IDSlider.value[1]).toFixed(2) }} {{ parameter }}
             </div>
 
             <r-slider
-              v-model="secondSlider.value"
+              v-model="IDSlider.value"
               :tooltips="false"
               :lazy="false"
-              :max="secondSlider.max"
-              :min="secondSlider.min"
+              :max="IDSlider.max"
+              :min="IDSlider.min"
             ></r-slider>
 
             <div class="table__dd-list-values">
               <div class="table__values-item">
                 <span>min</span>
-                <div>{{ (secondSlider.value[0]).toFixed(2) }} ({{ parameter }})</div>
+                <div>{{ (IDSlider.value[0]).toFixed(2) }} ({{ parameter }})</div>
               </div>
               <div class="table__values-sep"></div>
               <div class="table__values-item">
                 <span>max</span>
-                <div>{{ (secondSlider.value[1]).toFixed(2) }} ({{ parameter }})</div>
+                <div>{{ (IDSlider.value[1]).toFixed(2) }} ({{ parameter }})</div>
               </div>
             </div>
             <div class="table__dd-list-btns">
-              <div @click="clearFilter(firstSlider, secondSlider)">Clear</div>
+              <div @click="clearFilter(wallSlider, IDSlider, ODSlider)">Clear</div>
               <button
-                @click="setFilter(secondSlider, $refs.dd2)"
+                @click="setFilter(IDSlider, $refs.dd2)"
                 class="btn-primary sm color-white"
               >
                 Apply
@@ -88,7 +89,50 @@
         </template>
       </vue-collapsible-panel>
 
-      <vue-collapsible-panel class="table__dd price" :expanded="false" ref="dd3">
+      <vue-collapsible-panel class="table__dd" :expanded="false" ref="dd3">
+        <template #title>
+          <div class="table__dd-toggle">Outside Diameter</div>
+        </template>
+        <template #content class="table__dd-list">
+          <div class="table__dd-list list">
+            <div>
+              From {{ (ODSlider.value[0]).toFixed(2) }} {{ parameter }} to
+              {{ (ODSlider.value[1]).toFixed(2) }} {{ parameter }}
+            </div>
+
+            <r-slider
+              v-model="ODSlider.value"
+              :tooltips="false"
+              :lazy="false"
+              :max="ODSlider.max"
+              :min="ODSlider.min"
+            ></r-slider>
+
+            <div class="table__dd-list-values">
+              <div class="table__values-item">
+                <span>min</span>
+                <div>{{ ODSlider.value[0] }} ({{ parameter }})</div>
+              </div>
+              <div class="table__values-sep"></div>
+              <div class="table__values-item">
+                <span>max</span>
+                <div>{{ ODSlider.value[1] }} ({{ parameter }})</div>
+              </div>
+            </div>
+            <div class="table__dd-list-btns">
+              <div @click="clearFilter(wallSlider, IDSlider, ODSlider)">Clear</div>
+              <button
+                @click="setFilter(ODSlider, $refs.dd3)"
+                class="btn-primary sm color-white"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        </template>
+      </vue-collapsible-panel>
+
+      <vue-collapsible-panel class="table__dd price" :expanded="false" ref="dd4">
         <template #title>
           <div class="table__dd-toggle">
             {{ price }}
@@ -190,14 +234,20 @@ export default {
     return {
       priceStatus: false,
 
-      firstSlider: {
-        tick: 'ODx',
+      wallSlider: {
+        tick: 'Wall',
         value: [0, 100],
         max: null,
         min: 0,
       },
-      secondSlider: {
+      IDSlider: {
         tick: 'IDx',
+        value: [0, 100],
+        max: null,
+        min: 0,
+      },
+      ODSlider: {
+        tick: 'ODx',
         value: [0, 100],
         max: null,
         min: 0,
@@ -237,26 +287,24 @@ export default {
   },
 
   methods: {
-    setVal(slider) {
-      const elements = []
+    setSliderVal(slider) {
+      const elements = [].map(el => Number(el).toFixed(1))
       elements.length = 0
 
       this.$props.tItems.forEach((item) => {
-        elements.push(item[slider.tick])
+        elements.push(Number(item[slider.tick]))
       })
 
-      const min = Math.min(...elements)
-      const max = Math.max(...elements)
-
-      slider.min = min
-      slider.max = max
-      slider.value[0] = min
-      slider.value[1] = max
+      slider.min = Math.min(...elements)
+      slider.max = Math.max(...elements)
+      slider.value[0] = Math.min(...elements)
+      slider.value[1] = Math.max(...elements)
     },
 
     setAllValues() {
-      this.setVal(this.firstSlider)
-      this.setVal(this.secondSlider)
+      this.setSliderVal(this.wallSlider)
+      this.setSliderVal(this.IDSlider)
+      this.setSliderVal(this.ODSlider)
     },
   
     setFilter(slider, dd) {
@@ -281,6 +329,7 @@ export default {
     setPriceVal(val) {
       this.oldPrice = this.price
       this.price = val
+      this.$refs.dd4.toggle()
 
       return this.$emit('updatePrice', this.price)
     },
@@ -313,19 +362,35 @@ export default {
   
     convert() {
       const convertValues = (val) => {
-        [...this.$props.fetchData].map((el) => {
-          el.fields['IDx'] = 
+        [...this.$props.fetchData].map((item) => {
+          item.fields['IDx'] = 
             val == true 
-              ? el.fields['IDx'] * 25.4 
-              : el.fields['IDx'] / 25.4
-          el.fields['ODx'] = 
+              ? (item.fields['IDx'] * 25.4).toExponential(2)
+              : (item.fields['IDx'] / 25.4).toExponential(2)
+          item.fields['IDy'] = 
             val == true 
-              ? el.fields['ODx'] * 25.4 
-              : el.fields['ODx'] / 25.4 
-          el.fields['Weight/m'] = 
+              ? (item.fields['IDy'] * 25.4).toExponential(2)
+              : (item.fields['IDy'] / 25.4).toExponential(2)
+          item.fields['ODx'] = 
             val == true 
-              ? el.fields['Weight/m'] / 2.205 
-              : el.fields['Weight/m'] * 2.205
+              ? (item.fields['ODx'] * 25.4).toExponential(2)
+              : (item.fields['ODx'] / 25.4 ).toExponential(2)
+          item.fields['ODy'] = 
+            val == true 
+              ? (item.fields['ODy'] * 25.4).toExponential(2)
+              : (item.fields['ODy'] / 25.4 ).toExponential(2)
+          item.fields['Wall'] = 
+            val == true 
+              ? (item.fields['Wall'] / 25.4).toFixed(1)
+            : (item.fields['Wall'] * 25.4).toFixed(2)
+          item.fields['Stiffness'] = 
+            val == true 
+              ? (item.fields['Stiffness'] * 25.4).toExponential(2)
+              : (item.fields['Stiffness'] / 25.4).toExponential(2)
+          item.fields['Weight/m'] = 
+            val == true 
+              ? (item.fields['Weight/m'] / 2.205).toExponential(2)
+              : (item.fields['Weight/m'] * 2.205).toExponential(2)
         })
       }
 
@@ -339,8 +404,9 @@ export default {
         convertValues(false)
       }
 
-      this.setVal(this.firstSlider, 'ODx')
-      this.setVal(this.secondSlider, 'IDx')
+      this.setSliderVal(this.wallSlider)
+      this.setSliderVal(this.IDSlider)
+      this.setSliderVal(this.ODSlider)
 
       return this.$emit('parameters', {
         'val1': this.parameter,

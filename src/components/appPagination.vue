@@ -48,9 +48,6 @@ export default {
     page: {
       type: Number
     },
-    rowCount: {
-      type: Number
-    },
   },
 
   computed: {
@@ -60,8 +57,15 @@ export default {
   },
 
   methods: {
-    pagination(currentPage, lastPage, delta = 1) {
+    pagination(currentPage, lastPage) {
+      let delta = 1
       const range = Array(lastPage).fill().map((_, index) => index + 1)
+
+      if (window.innerWidth <= 768) {
+        delta = 0
+      } else {
+        delta = 1
+      }
 
       return range.reduce((pages, page) => {
         if (page === 1 || page === lastPage) {

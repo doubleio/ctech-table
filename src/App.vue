@@ -4,22 +4,52 @@
       <div class="table">
         <div class="table__menu">
           <div class="table__menu-col1" v-if="filterItems.length !== 0">
-            <div class="fw-500">Browse other carbon tubes</div>
-            <div class="table__tabs">
-              <div
-                class="table__tabs-item"
-                :class="currentTab.find(el => el === tab.product) ? 'active' : ''"
-                v-for="tab in tabNames"
-                :key="tab"
-                @click="tabChange(tab.product, idx)"
-                :data-shape="tab.shape"
-              >
-                <div>{{ tab.product }}</div>
+            <div class="fw-700">Select Shape</div>
+            <div class="table__menu-items">
+              <div class="table__tabs">
+                <div
+                  class="table__tabs-item"
+                  :class="currentTab.find(el => el === tab.product) ? 'active' : ''"
+                  v-for="tab in tabNames"
+                  :key="tab"
+                  @click="tabChange(tab.product, idx)"
+                  :data-shape="tab.shape"
+                >
+                  <div>{{ tab.product }}</div>
+                  <div 
+                    class="table__tabs-item-check" 
+                    :style="{ 'opacity': currentTab.find(el => el === tab.product) ? '1' : '0' }"
+                  >
+                    <check-ico></check-ico>
+                  </div>
+                </div>
+              </div>
+              <div class="table__categories">
+                <div class="fw-700">Select Laminate type</div>
+                <div class="table__categories-wrapper">
+                  <div 
+                    class="table__tabs-item table__tabs-item--category"
+                    v-for="category, idx in categories"
+                    :key="idx"
+                    :class="categoryTabs.find(el => el === category.patch) ? 'active' : ''"
+                    @click="categoryTabChange(category.patch, idx)"
+                  >
+                    <span 
+                      class="table__radio-label-big w-form-label"
+                    >{{ category.name }}</span>
+                    <div 
+                      class="table__tabs-item-check"
+                      :style="{ 'opacity': categoryTabs.find(el => el === category.patch) ? '1' : '0' }"
+                    >
+                      <check-ico></check-ico>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div>
-            <div class="fw-500">Other links</div>
+          <div v-if="!isMobile">
+            <div class="fw-700">Other links</div>
             <app-links></app-links>
           </div>
         </div>
@@ -34,27 +64,27 @@
                 @updatePrice="getPrice"
                 @setFilter="handleFilterValues"
                 @parameters="getParameters"
-                @clearFilter="handleFilterTabs"
+                @clearFilter="handleFilterCategory"
               ></app-filters>
 
               <div>
                 Showing {{ paginatedData.length }} of
-                {{ filterItems.length }} Items
+                <span class="underline">{{ filterItems.length }} Items</span>
               </div>
             </div>
-            <div class="table__content-info">
-
+            <div class="table__content-wrapper">
               <app-sort
                 :filterItems="filterItems"
                 :parameters="parameters"
               ></app-sort>
-
-              <div class="table__tb">
-                <app-item
-                  :data="paginatedData"
-                  :currency="price"
-                  :parameters="parameters"
-                ></app-item>
+              <div class="table__content-info">
+                <div class="table__tb">
+                  <app-item
+                    :data="paginatedData"
+                    :currency="price"
+                    :parameters="parameters"
+                  ></app-item>
+                </div>
               </div>
             </div>
             <app-pagination
@@ -73,6 +103,13 @@
 
           <app-loader v-else></app-loader>
         </div>
+        <div
+          class="table__menu"
+          v-if="isMobile"
+        >
+          <div class="fw-700">Other links</div>
+            <app-links></app-links>
+        </div>
       </div>
     </div>
   </div>
@@ -88,6 +125,7 @@ import AppLoader from '@/components/AppLoader.vue'
 
 import { pagination } from './mixins/pagination'
 import { api } from './api/airtable-request'
+import CheckIco from './components/icons/CheckIco.vue'
 
 export default {
   components: {
@@ -96,8 +134,9 @@ export default {
     AppItem,
     AppFilters,
     AppSort,
-    AppLoader
-  },
+    AppLoader,
+    CheckIco
+},
 
   mixins: [pagination],
 
@@ -116,6 +155,13 @@ export default {
         'val1': 'mm',
         'val2': 'kg'
       },
+
+      categories: [
+        { name: 'Standard Modulus Laminate', patch: 'Std Modulus Laminate' },
+        { name: 'High Modulus Laminate', patch: 'High Modulus Laminate' },
+        { name: '100% Cloth Laminate', patch: '100% Cloth Laminate' }
+      ],
+      categoryTabs: ['Std Modulus Laminate']
     }
   },
 
@@ -126,6 +172,7 @@ export default {
 
   mounted() {
     this.getParameters()
+    this.fetchItems.map(el => Number(el.fields['ODx']))
   },
 
   methods: {
@@ -186,10 +233,36 @@ export default {
       return this.filterItems = result
     },
 
+    categoryTabChange(val) {
+      let idx = this.categoryTabs.indexOf(val)
+
+      if (idx !== -1) {
+        this.categoryTabs.length === 1 ? '' : this.categoryTabs.splice(idx, 1)
+      } else {
+        this.categoryTabs.push(val)
+      }
+
+      this.handleFilterCategory()
+    },
+
+    handleFilterCategory() {
+      this.handleFilterTabs()
+
+      const result = this.filterItems.filter((item) => {
+        return this.categoryTabs.includes(item['SCategory'])
+      })
+
+      if (result.length === 0) {
+        return
+      }
+
+      return this.filterItems = result
+    },
+
     handleFilterTabs() {
       this.getAllItems()
       const result = this.filterItems.filter(
-        (item) => this.currentTab.includes(item['Product'])
+        (item) => this.currentTab.includes(item['FCategory'])
       )
 
       return this.filterItems = result
@@ -208,6 +281,7 @@ export default {
       }
       
       this.handleFilterTabs()
+      this.handleFilterCategory()
     },
 
     setCurrentTab() {
@@ -218,12 +292,12 @@ export default {
       for (let i = 0; i < this.filterItems.length; i++) {
         const item = this.filterItems[i]
         const itemType = typeof(item)
-        const key = `${itemType}_${item['Product']}`
+        const key = `${itemType}_${item['FCategory']}`
 
         if (!seen[key]) {
           seen[key] = 1
           result[j++] = {
-            'product': item['Product'], 
+            'product': item['FCategory'], 
             'shape': item['Shape']
           }
         }
@@ -238,7 +312,7 @@ export default {
         this.tabNames.forEach((el) => {
           const tabItem = el.shape
           const re = location.pathname !== '/' 
-            ? new RegExp(location.pathname.split('/product-type/')[1].split('-tube')[0], 'ig') 
+            ? new RegExp(location.pathname.split('/product-type/')[1].split('-carbon-fibre-tube')[0], 'ig') 
             : ''
 
           if (tabItem.search(re) !== -1 && location.pathname !== '/') {
@@ -252,7 +326,3 @@ export default {
   },
 }
 </script>
-
-<style>
-@import url('https://assets.website-files.com/61b8adc853887c7e8a0e1d78/css/ctech-dev.3236b9fe5.css');
-</style>

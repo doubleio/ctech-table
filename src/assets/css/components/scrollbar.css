@@ -1,0 +1,17 @@
+.table__tabs::-webkit-scrollbar,
+.table__content-wrapper::-webkit-scrollbar {
+  width:10px;
+}
+
+.table__tabs::-webkit-scrollbar-track,
+.table__content-wrapper::-webkit-scrollbar-track {
+  background:#C4C4C4;
+  border-radius: 31px;
+  margin-bottom: 15px;
+}
+
+.table__tabs::-webkit-scrollbar-thumb,
+.table__content-wrapper::-webkit-scrollbar-thumb {
+  border-radius: 31px;
+  background-color: #F6F6F6;
+}
