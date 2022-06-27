@@ -378,13 +378,13 @@
   border: 1px solid black;
   z-index: 100;
   padding: 30px;
-  max-width: 390px;
+  /* max-width: 390px; */
   top: 50px;
   left: -80px;
 }
 
-.table__th-item-popup img {
-  width: 316px;
+.table__th-item-popup-img {
+  max-width: 600px;
   object-fit: cover;
   margin-top: -30px;
 }
@@ -396,7 +396,8 @@
   line-height: 125%;
   color: black;
   margin-right: auto;
-  max-width: 140px;
+  /* max-width: 140px; */
+  margin-bottom: 30px;
 }
 
 .table__th-item-popup-close {
@@ -443,11 +444,17 @@
   .table__th, .table__tb-item {
     grid-template-columns: repeat(5, 1fr)
   }
+  
   .table__th-item:first-child {
     width: 160px;
   }
+
   .table__th-item {
     width: 100px;
+  }
+
+  .table__th-item-popup-img {
+    max-width: 350px;
   }
 }
 

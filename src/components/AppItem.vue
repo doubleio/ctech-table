@@ -1,9 +1,5 @@
 <template>
-    <div 
-      v-for="item in data" 
-      :key="item" 
-      class="table__tb-item"
-    >
+    <div v-for="item in data" :key="item" class="table__tb-item">
       <div class="table__th-item">
         <div>{{ item['Product'] }}</div>
       </div>
@@ -58,18 +54,25 @@
     methods: {
       setQueryParams(item) {
         let query = {
-          'product': item['Product'],
+          'product': item['FCategory'],
           'shape': item['Shape'],
-          'category': item['SCategory'],
-          'IDx': Number(item['IDx']).toFixed(2),
-          'IDy': Number(item['IDy']).toFixed(2),
-          'ODx': Number(item['ODx']).toFixed(2),
-          'ODy': Number(item['ODy']).toFixed(2),
-          'wall': item['Wall'],
-          'weight': item['Weight/m'],
+          'category': this.categoryValue(item['SCategory']),
+          'IDx': Number(item['IDx']).toFixed(2) + this.$props.parameters.val1,
+          'IDy': Number(item['IDy']).toFixed(2) + this.$props.parameters.val1,
+          'ODx': Number(item['ODx']).toFixed(2) + this.$props.parameters.val1,
+          'ODy': Number(item['ODy']).toFixed(2) + this.$props.parameters.val1,
+          'wall': item['Wall'] + this.$props.parameters.val1,
+          'weight': item['Weight/m'] + this.$props.parameters.val2,
         }
 
         return sessionStorage.setItem('params', JSON.stringify(query))
+      },
+
+      categoryValue(val) {
+        if (val === 'Std Modulus Laminate') {
+          return 'Standard modulus laminate'
+        }
+        return val
       }
     }
   }

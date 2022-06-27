@@ -8,7 +8,7 @@
           <div class="table__th-item-popup" v-if="productPopupIsShow">
             <popup-up class="table__th-item-popup-dec"></popup-up>
             <div class="table__th-item-popup-title">Product dimension values</div>
-            <img src="https://uploads-ssl.webflow.com/61b8adc853887c7e8a0e1d78/62a861fd31ad9f1311921d32_c-tech_tube_section.jpg" alt="">
+            <img class="table__th-item-popup-img" src="https://uploads-ssl.webflow.com/61b8adc853887c7e8a0e1d78/62ba2feaa4656c5bbae93160_Website%20Final%20Concept%201%201.jpg" alt="">
             <close-ico @click="handleProductPopup" class="table__th-item-popup-close"></close-ico>
           </div>
         </transition>

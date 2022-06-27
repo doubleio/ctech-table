@@ -7,6 +7,10 @@
 @import url('./tabs/tabs.css');
 @import url('./tabs/table.css');
 
+img {
+  max-width: 100%;
+}
+
 .underline {
   text-decoration: underline;
 }

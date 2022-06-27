@@ -172,7 +172,6 @@ export default {
 
   mounted() {
     this.getParameters()
-    this.fetchItems.map(el => Number(el.fields['ODx']))
   },
 
   methods: {
@@ -217,7 +216,7 @@ export default {
     },
 
     handleFilterValues(e) {
-      this.handleFilterTabs()
+      this.handleFilterCategory()
       const slider = e.slider
       const sliderValue = e.slider.tick
 
