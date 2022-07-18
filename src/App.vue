@@ -9,37 +9,37 @@
               <div class="table__tabs">
                 <div
                   class="table__tabs-item"
-                  :class="currentTab.find(el => el === tab.product) ? 'active' : ''"
+                  :class="currentTab.find(el => el === tab) ? 'active' : ''"
                   v-for="tab in tabNames"
                   :key="tab"
-                  @click="tabChange(tab.product, idx)"
-                  :data-shape="tab.shape"
+                  @click="tabChange(tab, idx)"
+                  :data-shape="tab"
                 >
-                  <div>{{ tab.product }}</div>
+                  <div>{{ tab }}</div>
                   <div 
                     class="table__tabs-item-check" 
-                    :style="{ 'opacity': currentTab.find(el => el === tab.product) ? '1' : '0' }"
+                    :style="{ 'opacity': currentTab.find(el => el === tab) ? '1' : '0' }"
                   >
                     <check-ico></check-ico>
                   </div>
                 </div>
               </div>
-              <div class="table__categories">
+              <div class="table__categories" v-if="categoryNames.length > 1">
                 <div class="fw-700">Select Laminate type</div>
                 <div class="table__categories-wrapper">
                   <div 
                     class="table__tabs-item table__tabs-item--category"
-                    v-for="category, idx in categories"
+                    v-for="category, idx in categoryNames"
                     :key="idx"
-                    :class="categoryTabs.find(el => el === category.patch) ? 'active' : ''"
-                    @click="categoryTabChange(category.patch, idx)"
+                    :class="categoryTabs.find(el => el === category) ? 'active' : ''"
+                    @click="categoryTabChange(category, idx)"
                   >
                     <span 
                       class="table__radio-label-big w-form-label"
-                    >{{ category.name }}</span>
+                    >{{ category }}</span>
                     <div 
                       class="table__tabs-item-check"
-                      :style="{ 'opacity': categoryTabs.find(el => el === category.patch) ? '1' : '0' }"
+                      :style="{ 'opacity': categoryTabs.find(el => el === category) ? '1' : '0' }"
                     >
                       <check-ico></check-ico>
                     </div>
@@ -122,10 +122,9 @@ import AppItem from '@/components/AppItem.vue'
 import AppFilters from '@/components/AppFilters.vue'
 import AppSort from '@/components/AppSort.vue'
 import AppLoader from '@/components/AppLoader.vue'
-
+import CheckIco from './components/icons/CheckIco.vue'
 import { pagination } from './mixins/pagination'
 import { api } from './api/airtable-request'
-import CheckIco from './components/icons/CheckIco.vue'
 
 export default {
   components: {
@@ -136,7 +135,7 @@ export default {
     AppSort,
     AppLoader,
     CheckIco
-},
+  },
 
   mixins: [pagination],
 
@@ -144,24 +143,20 @@ export default {
     return {
       fetchItems: [],
       filterItems: [],
-      offset: null,
       loadingStatus: false,
+      fetchError: false,
 
       tabNames: null,
       currentTab: [],
+
+      categoryNames: null,
+      categoryTabs: [],
 
       price: 'NZD',
       parameters: {
         'val1': 'mm',
         'val2': 'kg'
-      },
-
-      categories: [
-        { name: 'Standard Modulus Laminate', patch: 'Std Modulus Laminate' },
-        { name: 'High Modulus Laminate', patch: 'High Modulus Laminate' },
-        { name: '100% Cloth Laminate', patch: '100% Cloth Laminate' }
-      ],
-      categoryTabs: ['Std Modulus Laminate']
+      }
     }
   },
 
@@ -176,31 +171,24 @@ export default {
 
   methods: {
     async init() {
-      const res = await fetch(api(this.offset), {
+      const res = await fetch(api(), {
         method: 'GET',
       })
 
       if (res.ok) {
         res.json().then((data) => {
-          if (data.offset !== undefined) {
-            this.fetchItems.push(data.records)
-            this.offset = data.offset
-            this.init()
-          } else {
-            this.fetchItems.push(data.records)
-            this.fetchItems = this.fetchItems.reduce((acc, it) => [...acc, ...it], [])
-            this.getAllItems()
-            this.setCurrentTab()
-            return this.loadingStatus = true
-          }
+          this.fetchItems = data.data
+          this.getAllItems()
+          this.setCurrentTab()
+          return this.loadingStatus = true
         })
       } else {
-        alert('Something went wrong, reload the page')
+        return this.fetchError = true
       }
     },
 
     getAllItems() {
-      return this.filterItems = this.fetchItems.map((item) => item.fields)
+      return this.filterItems = this.fetchItems
     },
 
     getPrice(value) {
@@ -248,7 +236,7 @@ export default {
       this.handleFilterTabs()
 
       const result = this.filterItems.filter((item) => {
-        return this.categoryTabs.includes(item['SCategory'])
+        return this.categoryTabs.includes(item['Laminate'])
       })
 
       if (result.length === 0) {
@@ -261,7 +249,7 @@ export default {
     handleFilterTabs() {
       this.getAllItems()
       const result = this.filterItems.filter(
-        (item) => this.currentTab.includes(item['FCategory'])
+        (item) => this.currentTab.includes(item['Shape'])
       )
 
       return this.filterItems = result
@@ -284,40 +272,30 @@ export default {
     },
 
     setCurrentTab() {
-      const seen = {}
-      const result = []
-      let j = 0
+      let resultTabs = []
+      let resultCategories = []
 
-      for (let i = 0; i < this.filterItems.length; i++) {
-        const item = this.filterItems[i]
-        const itemType = typeof(item)
-        const key = `${itemType}_${item['FCategory']}`
-
-        if (!seen[key]) {
-          seen[key] = 1
-          result[j++] = {
-            'product': item['FCategory'], 
-            'shape': item['Shape']
-          }
-        }
-      }
-
-      this.tabNames = result
-      sessionStorage.setItem('ProductNames', JSON.stringify(result))
+      resultTabs = [...new Set(this.fetchItems.map(item => item['Shape']))]
+      resultCategories = [...new Set(this.fetchItems.map(item => item['Laminate']))]
       
-      if (result.length > 0) {
+      this.tabNames = resultTabs
+      this.categoryNames = resultCategories
+
+      sessionStorage.setItem('ProductNames', JSON.stringify(this.tabNames))
+      sessionStorage.setItem('CategoryNames', JSON.stringify(this.categoryNames))
+      
+      if (resultTabs.length > 0) {
         sessionStorage.setItem('loaded', true)
 
         this.tabNames.forEach((el) => {
-          const tabItem = el.shape
           const re = location.pathname !== '/' 
             ? new RegExp(location.pathname.split('/product-type/')[1].split('-carbon-fibre-tube')[0], 'ig') 
             : ''
 
-          if (tabItem.search(re) !== -1 && location.pathname !== '/') {
-            this.tabChange(el.product)
+          if (el.search(re) !== -1 && location.pathname !== '/') {
+            this.tabChange(el)
           } else {
-            this.tabChange(this.tabNames[0].product)
+            this.tabChange(this.tabNames[0])
           }
         })
       }

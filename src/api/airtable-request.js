@@ -1,8 +1,4 @@
-const apiKey = 'keyEP1Ky8tJP7sodr'
-const table = 'appHkRvpA0XNVEQ8f/table_all'
-
-export const api = (offset) =>
-  `https://api.airtable.com/v0/${table}` +
-    `?api_key=${apiKey}` +
-    `&view=Grid%20view` +
-    `&offset=${offset ? offset : ''}`
+export const api = () =>
+  `http://db.notedme.ru/items/table_test` +
+    `?limit=-1` + 
+    `&fields=Laminate,Shape,Section,Wall,IDx,IDy,ODx,ODy,Weight,Carbon_Stiffness,Price`

@@ -232,8 +232,6 @@ export default {
 
   data() {
     return {
-      priceStatus: false,
-
       wallSlider: {
         tick: 'Wall',
         value: [0, 100],
@@ -344,53 +342,50 @@ export default {
         }
       )
         .then((res) => {
-          this.priceStatus = res.ok
           return res.json()
         })
         .then((data) => data.info.rate)
-
-      if (this.priceStatus !== false) {
-        this.priceStatus = false
-        const result = [...this.$props.fetchData].map((el, idx, arr) => {
-          return (arr[idx].fields['Price/m'] = (
-            el.fields['Price/m'] * currencyRes
-          ).toFixed(2))
+        .then((data) => {
+          const result = [...this.$props.fetchData].map((el, idx, arr) => {
+            return (arr[idx]['Price'] = (
+              el['Price'] * data
+            ).toFixed(2))
+          })
+          return result
         })
-        return result
-      }
     },
   
     convert() {
       const convertValues = (val) => {
         [...this.$props.fetchData].map((item) => {
-          item.fields['IDx'] = 
+          item['IDx'] = 
             val == true 
-              ? (item.fields['IDx'] * 25.4).toExponential(2)
-              : (item.fields['IDx'] / 25.4).toExponential(2)
-          item.fields['IDy'] = 
+              ? (item['IDx'] * 25.4).toExponential(2)
+              : (item['IDx'] / 25.4).toExponential(2)
+          item['IDy'] = 
             val == true 
-              ? (item.fields['IDy'] * 25.4).toExponential(2)
-              : (item.fields['IDy'] / 25.4).toExponential(2)
-          item.fields['ODx'] = 
+              ? (item['IDy'] * 25.4).toExponential(2)
+              : (item['IDy'] / 25.4).toExponential(2)
+          item['ODx'] = 
             val == true 
-              ? (item.fields['ODx'] * 25.4).toExponential(2)
-              : (item.fields['ODx'] / 25.4 ).toExponential(2)
-          item.fields['ODy'] = 
+              ? (item['ODx'] * 25.4).toExponential(2)
+              : (item['ODx'] / 25.4 ).toExponential(2)
+          item['ODy'] = 
             val == true 
-              ? (item.fields['ODy'] * 25.4).toExponential(2)
-              : (item.fields['ODy'] / 25.4 ).toExponential(2)
-          item.fields['Wall'] = 
+              ? (item['ODy'] * 25.4).toExponential(2)
+              : (item['ODy'] / 25.4 ).toExponential(2)
+          item['Wall'] = 
             val == true 
-              ? (item.fields['Wall'] / 25.4).toFixed(1)
-            : (item.fields['Wall'] * 25.4).toFixed(2)
-          item.fields['Stiffness'] = 
+              ? (item['Wall'] * 25.4).toExponential(1)
+            : (item['Wall'] / 25.4).toExponential(1)
+          item['Carbon_Stiffness'] = 
             val == true 
-              ? (item.fields['Stiffness'] * 25.4).toExponential(2)
-              : (item.fields['Stiffness'] / 25.4).toExponential(2)
-          item.fields['Weight/m'] = 
+              ? (item['Carbon_Stiffness'] * 25.4).toExponential(2)
+              : (item['Carbon_Stiffness'] / 25.4).toExponential(2)
+          item['Weight'] = 
             val == true 
-              ? (item.fields['Weight/m'] / 2.205).toExponential(2)
-              : (item.fields['Weight/m'] * 2.205).toExponential(2)
+              ? (item['Weight'] / 2.205).toExponential(2)
+              : (item['Weight'] * 2.205).toExponential(2)
         })
       }
 
