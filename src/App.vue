@@ -48,10 +48,9 @@
               </div>
             </div>
           </div>
-          <div v-if="!isMobile">
-            <div class="fw-700">Other links</div>
+          <template v-if="!isMobile">
             <app-links></app-links>
-          </div>
+          </template>
         </div>
         <div class="table__content">
           <template v-if="filterItems.length !== 0">
@@ -107,8 +106,7 @@
           class="table__menu"
           v-if="isMobile"
         >
-          <div class="fw-700">Other links</div>
-            <app-links></app-links>
+          <app-links></app-links>
         </div>
       </div>
     </div>
@@ -160,7 +158,7 @@ export default {
     }
   },
 
-  async created() {
+  created() {
     this.init()
     sessionStorage.removeItem('loaded')
   },
@@ -178,7 +176,6 @@ export default {
       if (res.ok) {
         res.json().then((data) => {
           this.fetchItems = data.data
-          this.getAllItems()
           this.setCurrentTab()
           return this.loadingStatus = true
         })
@@ -272,32 +269,22 @@ export default {
     },
 
     setCurrentTab() {
-      let resultTabs = []
-      let resultCategories = []
-
-      resultTabs = [...new Set(this.fetchItems.map(item => item['Shape']))]
-      resultCategories = [...new Set(this.fetchItems.map(item => item['Laminate']))]
-      
-      this.tabNames = resultTabs
-      this.categoryNames = resultCategories
+      this.tabNames = [...new Set(this.fetchItems.map(item => item['Shape']))]
+      this.categoryNames = [...new Set(this.fetchItems.map(item => item['Laminate']))]
 
       sessionStorage.setItem('ProductNames', JSON.stringify(this.tabNames))
       sessionStorage.setItem('CategoryNames', JSON.stringify(this.categoryNames))
       
-      if (resultTabs.length > 0) {
-        sessionStorage.setItem('loaded', true)
+      if (this.tabNames.length > 0) {
+        const re = location.pathname !== '/' 
+          ? new RegExp(location.pathname.split('/product-type/')[1].split('-carbon-fibre-tube')[0], 'ig') 
+          : ''
 
-        this.tabNames.forEach((el) => {
-          const re = location.pathname !== '/' 
-            ? new RegExp(location.pathname.split('/product-type/')[1].split('-carbon-fibre-tube')[0], 'ig') 
-            : ''
+        const tab = this.tabNames.find(el => el.search(re) !== -1)
 
-          if (el.search(re) !== -1 && location.pathname !== '/') {
-            this.tabChange(el)
-          } else {
-            this.tabChange(this.tabNames[0])
-          }
-        })
+        tab ? this.tabChange(tab) : this.tabChange(this.tabNames[0])
+
+        return sessionStorage.setItem('loaded', true)
       }
     },
   },
