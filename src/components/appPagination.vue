@@ -13,7 +13,7 @@
       <div
         class="table__numbers-btn"
         v-for="item in pagination(page, paginatedNumbers)"
-        :key="item"
+        :key="item[0]"
         @click="$emit('goToPage', item)"
         :class="item === page ? 'active' : ''"
       >{{ item }}</div>
@@ -50,6 +50,12 @@ export default {
     },
   },
 
+  data() {
+    return {
+      renderItems: null,
+    }
+  },
+
   computed: {
     paginatedNumbers() {
       return Math.ceil(this.$props.items.length / this.$props.perPage)
@@ -58,16 +64,10 @@ export default {
 
   methods: {
     pagination(currentPage, lastPage) {
-      let delta = 1
+      let delta = window.innerWidth <= 768 ? 0 : 1
       const range = Array(lastPage).fill().map((_, index) => index + 1)
 
-      if (window.innerWidth <= 768) {
-        delta = 0
-      } else {
-        delta = 1
-      }
-
-      return range.reduce((pages, page) => {
+      const render = range.reduce((pages, page) => {
         if (page === 1 || page === lastPage) {
           return [...pages, page]
         }
@@ -82,6 +82,8 @@ export default {
 
         return pages
       }, [])
+
+      return this.renderItems = render
     }
   }
 }

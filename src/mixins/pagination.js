@@ -4,7 +4,7 @@ export const pagination = {
       isFirstPage: true,
       isLastPage: false,
       perPage: 100,
-      page: 1,
+      page: 1
     }
   },
 
@@ -47,9 +47,8 @@ export const pagination = {
     goToPage(numPage) {
       if (numPage === '...') {
         return
-      } else {
-        this.page = numPage
       }
+      return this.page = numPage
     },
   }
 }

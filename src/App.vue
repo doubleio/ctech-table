@@ -256,7 +256,6 @@ export default {
     },
 
     tabChange(val) {
-      this.goToPage(1)
       this.currentSortType = null
 
       let idx = this.currentTab.indexOf(val)
@@ -269,6 +268,7 @@ export default {
       
       this.handleFilterTabs()
       this.handleFilterCategory()
+      this.goToPage(1)
     },
 
     setCurrentTab() {
