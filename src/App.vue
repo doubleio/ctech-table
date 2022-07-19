@@ -24,7 +24,7 @@
                   </div>
                 </div>
               </div>
-              <div class="table__categories" v-if="categoryNames.length > 1">
+              <div class="table__categories" v-if="categoryNames.length !== 0">
                 <div class="fw-700">Select Laminate type</div>
                 <div class="table__categories-wrapper">
                   <div 
@@ -282,6 +282,7 @@ export default {
 
         const tab = this.tabNames.find(el => el.search(re) !== -1)
 
+        this.categoryTabs.push(this.categoryNames[0])
         tab ? this.tabChange(tab) : this.tabChange(this.tabNames[0])
 
         return sessionStorage.setItem('loaded', true)
