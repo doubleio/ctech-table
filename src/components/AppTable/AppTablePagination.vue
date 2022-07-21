@@ -1,6 +1,6 @@
 <template>
   <div class="table__pagination">
-    <div class="table__arrow" @click="$emit('prevPage')" :disabled="firstPage">
+    <div class="table__arrow" @click="prevPage" :disabled="isFirstPage">
       <img
         src="https://assets.website-files.com/61b8adc853887c7e8a0e1d78/61f300b3134114d64c7ef6d8_table-arrow-left.svg"
         loading="lazy"
@@ -14,11 +14,11 @@
         class="table__numbers-btn"
         v-for="item in pagination(page, paginatedNumbers)"
         :key="item[0]"
-        @click="$emit('goToPage', item)"
+        @click="goToPage(item)"
         :class="item === page ? 'active' : ''"
       >{{ item }}</div>
     </div>
-    <div class="table__arrow" @click="$emit('nextPage')" :disabled="lastPage">
+    <div class="table__arrow" @click="nextPage" :disabled="isLastPage">
       <div>Next</div>
       <img
         src="https://assets.website-files.com/61b8adc853887c7e8a0e1d78/61f300b392aaf7f52fc30682_table-arrow-right.svg"
@@ -31,38 +31,34 @@
 </template>
 
 <script>
+import { mapActions, mapState, mapWritableState } from 'pinia'
+import { useStore } from '../../stores/index'
+
 export default {
-  props: {
-    items: {
-      type: Array
-    },
-    firstPage: {
-      type: Boolean
-    },
-    lastPage: {
-      type: Boolean
-    },
-    perPage: {
-      type: Number
-    },
-    page: {
-      type: Number
+  computed: {
+    ...mapState(useStore, ['filterItems']),
+    ...mapWritableState(useStore, ['isLastPage', 'isFirstPage', 'perPage', 'page']),
+
+    paginatedNumbers() {
+      return Math.ceil(this.filterItems.length / this.perPage)
     },
   },
 
-  data() {
-    return {
-      renderItems: null,
+  watch: {
+    page(val) {
+      val === 1 
+        ? this.isFirstPage = true 
+        : this.isFirstPage = false
+      
+      val === this.paginatedNumbers
+        ? this.isLastPage = true
+        : this.isLastPage = false
     }
   },
 
-  computed: {
-    paginatedNumbers() {
-      return Math.ceil(this.$props.items.length / this.$props.perPage)
-    },
-  },
-
   methods: {
+    ...mapActions(useStore, ['goToPage']),
+
     pagination(currentPage, lastPage) {
       let delta = window.innerWidth <= 768 ? 0 : 1
       const range = Array(lastPage).fill().map((_, index) => index + 1)
@@ -84,7 +80,19 @@ export default {
       }, [])
 
       return this.renderItems = render
-    }
+    },
+
+    nextPage() {
+      if (this.page !== this.paginatedNumbers) {
+        this.page += 1
+      }
+    },
+
+    prevPage() {
+      if (this.page !== 1) {
+        this.page -= 1
+      }
+    },
   }
 }
 </script>

@@ -101,46 +101,19 @@ img {
   box-shadow: none;
 }
 
-.slide-enter-active,
-.slide-leave-active {
-  transition: height 0.5s ease;
-}
-
-.slide-enter-from,
-.slide-leave-to {
-  height: 0;
-}
-
-.vcp__body {
-  position: absolute;
-  z-index: 1000;
-  overflow: hidden;
-}
-
-.vcp__body-content {
-  padding-bottom: 8px;
-  padding-top: 8px;
-}
-
 .table__filters-radio-check {
   position: absolute;
   left: 0px;
   top: 0px;
   right: 0px;
   bottom: 0px;
-  width: auto;
-  height: auto;
-  margin-top: 0px;
-  margin-left: 0px;
-  border-style: none;
-  border-radius: 0%;
   background-image: url('https://assets.website-files.com/61b8adc853887c7e8a0e1d78/61f1c77857c5d99587ee3c08_radio.svg');
   background-position: 0% 50%;
   background-size: 22px 22px;
   background-repeat: no-repeat;
+  cursor: pointer;
 }
 
-.table__filters-radio-check.w--redirected-checked {
-  border-style: none;
+.table__filters-radio-check.is-checked {
   background-image: url('https://assets.website-files.com/61b8adc853887c7e8a0e1d78/61f1c77831a917e42b13e355_radio-check.svg');
 }
