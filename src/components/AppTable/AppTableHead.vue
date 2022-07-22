@@ -10,6 +10,7 @@
         >
           <template v-slot:accordion-head>
             <div class="table__dd-toggle">{{ slider.title }}</div>
+            <icon-accordion class="table__dd-toggle-icon"></icon-accordion>
           </template>
           <template v-slot:accordion-body>
             <div class="table__dd-list list">
@@ -55,6 +56,7 @@
         <the-accordion-item class="table__dd price">
           <template v-slot:accordion-head>
             <div class="table__dd-toggle">{{ price }}</div>
+            <icon-accordion class="table__dd-toggle-icon"></icon-accordion>
           </template>
           <template v-slot:accordion-body>
             <div class="table__dd-list price">
@@ -72,10 +74,10 @@
       <div class="table__filters-radios-wrapper">
         <div class="table__filters-radios">
           <label class="table__filters-radio" v-for="(item, idx) in convertItems" :key="idx">
-            <div
+            <icon-checkbox
               class="table__filters-radio-check"
-              :class="{ 'is-checked': radio === item.value ? true : false }"
-            ></div>
+              :isChecked="radio === item.value ? true : false"
+            ></icon-checkbox>
             <input
               type="radio"
               name="sort"
@@ -84,8 +86,10 @@
               v-model="radio"
               @change="convert"
             />
-            <span class="table__radio-label" :for="item.value">{{ item.title1 }}</span>
-            <div>{{ item.title2 }}</div>
+            <div>
+              <span class="table__radio-label" :for="item.value">{{ item.title1 }}</span>
+              <div>{{ item.title2 }}</div>
+            </div>
           </label>
         </div>
       </div>
@@ -104,13 +108,17 @@ import TheAccordion from '../Accordion/TheAccordion.vue'
 import TheAccordionItem from '../Accordion/TheAccordionItem.vue'
 import { mapState, mapWritableState, mapActions } from 'pinia'
 import { useStore } from '../../stores/index'
+import IconCheckbox from '../icons/IconCheckbox.vue'
+import IconAccordion from '../icons/IconAccordion.vue'
 
 export default {
   components: {
     rSlider,
     TheAccordion,
-    TheAccordionItem
-  },
+    TheAccordionItem,
+    IconCheckbox,
+    IconAccordion
+},
 
   data() {
     return {
@@ -181,12 +189,12 @@ export default {
   },
 
   methods: {
-    ...mapActions(useStore, ['handleFilterCategory']),
+    ...mapActions(useStore, ['handleFilterTabs']),
 
     setSliderVal() {
       this.sliders.forEach(slider => {
-        let min = Math.min.apply(Math, this.filterItems.map(item => item[slider.tick]))
-        let max = Math.max.apply(Math, this.filterItems.map(item => item[slider.tick]))
+        let min = Math.min.apply(Math, [...this.filterItems].map(item => item[slider.tick]))
+        let max = Math.max.apply(Math, [...this.filterItems].map(item => item[slider.tick]))
 
         slider.min = min
         slider.max = max
@@ -196,9 +204,9 @@ export default {
     },
   
     setFilter(slider) {
-      this.handleFilterCategory()
+      this.handleFilterTabs()
 
-      const result = this.filterItems.filter((item) => {
+      const result = [...this.filterItems].filter((item) => {
         return (
           item[slider.tick]
             >= slider.value[0] &&
@@ -218,7 +226,7 @@ export default {
         slider.value[1] = slider.max
       })
       this.$refs.accordion.accordion.active = null
-      this.handleFilterCategory()
+      this.handleFilterTabs()
     },
 
     setPriceVal(val) {

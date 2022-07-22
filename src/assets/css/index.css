@@ -100,20 +100,3 @@ img {
   border: 1px solid #91979A;
   box-shadow: none;
 }
-
-.table__filters-radio-check {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  background-image: url('https://assets.website-files.com/61b8adc853887c7e8a0e1d78/61f1c77857c5d99587ee3c08_radio.svg');
-  background-position: 0% 50%;
-  background-size: 22px 22px;
-  background-repeat: no-repeat;
-  cursor: pointer;
-}
-
-.table__filters-radio-check.is-checked {
-  background-image: url('https://assets.website-files.com/61b8adc853887c7e8a0e1d78/61f1c77831a917e42b13e355_radio-check.svg');
-}

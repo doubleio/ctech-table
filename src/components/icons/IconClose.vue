@@ -4,9 +4,3 @@
     <line x1="15.6548" y1="14.68" x2="0.654762" y2="0.361855" stroke="black"/>
   </svg>
 </template>
-
-<script>
-  export default {
-    
-  }
-</script>

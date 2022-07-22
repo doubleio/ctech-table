@@ -50,7 +50,6 @@ export default {
           return this.loadingStatus = true
         })
         .catch((err) => {
-          console.log(err)
           return this.fetchError = true
         })
     }

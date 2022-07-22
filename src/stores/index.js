@@ -39,10 +39,6 @@ export const useStore = defineStore('main', {
   },
 
   actions: {
-    getAllItems() {
-      return this.filterItems = this.fetchItems
-    },
-
     categoryTabChange(val) {
       let idx = this.categoryTabs.indexOf(val)
 
@@ -56,9 +52,7 @@ export const useStore = defineStore('main', {
     },
 
     handleFilterCategory() {
-      this.handleFilterTabs()
-
-      const result = this.filterItems.filter((item) => {
+      const result = [...this.filterItems].filter((item) => {
         return this.categoryTabs.includes(item['Laminate'])
       })
 
@@ -70,13 +64,12 @@ export const useStore = defineStore('main', {
     },
 
     handleFilterTabs() {
-      this.getAllItems()
-
-      const result = this.fetchItems.filter(
+      const result = [...this.fetchItems].filter(
         (item) => this.currentTab.includes(item['Shape'])
       )
 
-      return this.filterItems = result
+      this.filterItems = result
+      return this.handleFilterCategory()
     },
 
     tabChange(val) {
@@ -89,7 +82,6 @@ export const useStore = defineStore('main', {
       }
       
       this.handleFilterTabs()
-      this.handleFilterCategory()
       this.currentSortType = null
       this.goToPage(1)
     },
@@ -100,19 +92,14 @@ export const useStore = defineStore('main', {
 
       sessionStorage.setItem('ProductNames', JSON.stringify(this.tabNames))
       sessionStorage.setItem('CategoryNames', JSON.stringify(this.categoryNames))
-      
-      if (this.tabNames.length > 0) {
-        const re = location.pathname !== '/' 
-          ? new RegExp(location.pathname.split('/product-type/')[1].split('-carbon-fibre-tube')[0], 'ig') 
-          : ''
 
-        const tab = this.tabNames.find(el => el.search(re) !== -1)
-
+      if (this.tabNames.length !== 0) {
+        let tab = this.tabNames.filter(el => location.pathname.search(el.toLowerCase()) !== -1)[0] || 'Round'
         this.categoryTabs.push(this.categoryNames[0])
-        tab ? this.tabChange(tab) : this.tabChange(this.tabNames[0])
-
-        return sessionStorage.setItem('loaded', true)
+        this.tabChange(tab)
       }
+
+      return sessionStorage.setItem('loaded', true)
     },
 
     goToPage(numPage) {

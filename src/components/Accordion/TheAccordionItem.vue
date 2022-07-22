@@ -74,6 +74,7 @@ export default {
 .accordion__item-head {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .accordion__item-body {

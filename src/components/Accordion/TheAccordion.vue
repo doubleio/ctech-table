@@ -14,6 +14,7 @@ export default {
       }
     }
   },
+
   provide() {
     return { accordion: this.accordion }
   }

@@ -10,14 +10,14 @@
             v-for="tab in tabNames"
             :key="tab"
             @click="tabChange(tab, idx)"
-            :data-shape="tab"
           >
+            <component :isColor="currentTab.find(el => el === tab) ? '#FFFFFF' : null" :is="'iconMenu' + tab"></component>
             <div>{{ tab }}</div>
             <div 
               class="table__tabs-item-check" 
               :style="{ 'opacity': currentTab.find(el => el === tab) ? '1' : '0' }"
             >
-              <check-ico></check-ico>
+              <icon-check></icon-check>
             </div>
           </div>
         </div>
@@ -38,7 +38,7 @@
                 class="table__tabs-item-check"
                 :style="{ 'opacity': categoryTabs.find(el => el === category) ? '1' : '0' }"
               >
-                <check-ico></check-ico>
+                <icon-check></icon-check>
               </div>
             </div>
           </div>
@@ -54,14 +54,21 @@
 <script>
 import { mapActions, mapWritableState } from 'pinia'
 import { useStore } from '../../stores/index'
-
 import AppMenuLinks from './AppMenuLinks.vue'
-import CheckIco from '../icons/CheckIco.vue'
+import IconCheck from '../icons/IconCheck.vue'
+import IconMenuRound from '../icons/IconMenu/IconMenuRound.vue'
+import IconMenuSquare from '../icons/IconMenu/IconMenuSquare.vue'
+import IconMenuRectangular from '../icons/IconMenu/IconMenuRectangular.vue'
+import IconMenuAerofoil from '../icons/IconMenu/IconMenuAerofoil.vue'
 
 export default {
   components: {
     AppMenuLinks,
-    CheckIco
+    IconCheck,
+    'IconMenuRound': IconMenuRound,
+    'IconMenuSquare': IconMenuSquare,
+    'IconMenuRectangular': IconMenuRectangular,
+    'IconMenuAerofoil/Elliptical': IconMenuAerofoil
   },
 
   computed: {
