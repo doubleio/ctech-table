@@ -19,7 +19,7 @@
         <div>{{ Number(item['Wall']) }} {{ parameter }}</div>
       </div>
       <div class="table__th-item">
-        <div>{{ Number(item['Carbon_Stiffness']) }} {{ parameter }}</div>
+        <div>{{ Number(item['Carbon_Stiffness']) }} kNm2</div>
       </div>
       <div class="table__th-item">
         <div>{{ priceFormat(item['Price'], price) }}</div>

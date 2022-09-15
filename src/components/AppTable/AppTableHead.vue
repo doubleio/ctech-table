@@ -277,10 +277,6 @@ export default {
             val == true 
               ? (item['Wall'] * 25.4).toFixed(1)
               : (item['Wall'] / 25.4).toExponential(1)
-          item['Carbon_Stiffness'] = 
-            val == true 
-              ? (item['Carbon_Stiffness'] * 25.4).toExponential(2)
-              : (item['Carbon_Stiffness'] / 25.4).toExponential(2)
           item['Weight'] = 
             val == true 
               ? (item['Weight'] / 2.205).toExponential(2)
