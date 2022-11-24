@@ -64,36 +64,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.accordion__item {
-  cursor: pointer;
-  position: relative;
-}
-
-.accordion__item-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.accordion__item-body {
-  margin-top: 8px;
-  position: absolute;
-  z-index: 1001;
-  height: 0px;
-}
-
-.accordion-enter-active,
-.accordion-leave-active {
-  will-change: height, opacity;
-  transition: height 0.3s ease, opacity 0.3s ease;
-  overflow: hidden;
-}
-
-.accordion-enter,
-.accordion-leave-to {
-  height: 0 !important;
-  opacity: 0;
-}
-</style>
