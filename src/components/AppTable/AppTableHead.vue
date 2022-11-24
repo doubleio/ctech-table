@@ -118,7 +118,7 @@ export default {
     TheAccordionItem,
     IconCheckbox,
     IconAccordion
-},
+  },
 
   data() {
     return {
@@ -217,7 +217,7 @@ export default {
 
       this.$refs.accordion.accordion.active = null
 
-      return this.filterItems = result
+      this.filterItems = result
     },
   
     clearFilter() {
@@ -246,7 +246,7 @@ export default {
         })
         .then((data) => {
           const result = [...this.fetchItems].map((el, idx, arr) => {
-            return (arr[idx]['Price'] = (
+            (arr[idx]['Price'] = (
               el['Price'] * data.info.rate
             ).toFixed(2))
           })

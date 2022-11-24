@@ -69,12 +69,6 @@ img {
   font-size: 11px;
 }
 
-.table__values-sep {
-  width: 8px;
-  height: 1px;
-  background-color: black;
-}
-
 :root {
   --slider-handle-height: 20px;
   --slider-handle-width: 20px;

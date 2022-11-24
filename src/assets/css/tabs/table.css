@@ -41,6 +41,11 @@
   align-items: center;
   font-family: Inter, sans-serif;
   cursor: pointer;
+  border: 0;
+}
+
+.table__arrow[disabled] {
+  cursor: not-allowed;
 }
 
 .table__arrow-ico {
@@ -60,6 +65,7 @@
 }
 
 .table__numbers-btn {
+  border: 0;
   margin-right: 1px;
   margin-left: 1px;
   padding: 10px 16.5px;
@@ -229,6 +235,7 @@
 .table__values-sep {
   width: 20%;
   text-align: center;
+  background-color: black;
 }
 
 .table__dd-list-btns > .btn-primary {

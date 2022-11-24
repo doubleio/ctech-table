@@ -47,10 +47,10 @@ export default {
           this.fetchItems = data.data
           this.filterItems = data.data
           this.setCurrentTab()
-          return this.loadingStatus = true
+          this.loadingStatus = true
         })
         .catch((err) => {
-          return this.fetchError = true
+          this.fetchError = true
         })
     }
   },

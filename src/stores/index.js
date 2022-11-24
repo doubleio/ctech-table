@@ -43,7 +43,7 @@ export const useStore = defineStore('main', {
       let idx = this.categoryTabs.indexOf(val)
 
       if (idx !== -1) {
-        this.categoryTabs.length === 1 ? '' : this.categoryTabs.splice(idx, 1)
+        return this.categoryTabs.length === 1 ? '' : this.categoryTabs.splice(idx, 1)
       } else {
         this.categoryTabs.push(val)
       }
@@ -59,8 +59,7 @@ export const useStore = defineStore('main', {
       if (result.length === 0) {
         return
       }
-
-      return this.filterItems = result
+      this.filterItems = result
     },
 
     handleFilterTabs() {
@@ -80,10 +79,10 @@ export const useStore = defineStore('main', {
       } else {
         this.currentTab.push(val)
       }
-      
+
       this.handleFilterTabs()
       this.currentSortType = null
-      this.goToPage(1)
+      return this.goToPage(1)
     },
 
     setCurrentTab() {
@@ -106,7 +105,7 @@ export const useStore = defineStore('main', {
       if (numPage === '...') {
         return
       }
-      return this.page = numPage
+      this.page = numPage
     },
   }
 })

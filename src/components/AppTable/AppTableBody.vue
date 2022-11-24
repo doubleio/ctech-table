@@ -4,13 +4,13 @@
       <div class="table__th-item">
         <div>Product</div>
         <div class="table__th-item-ico">
-          <icon-product @click="handleProductPopup"></icon-product>
+          <icon-product @click="handleProductPopup()"></icon-product>
           <transition name="fadeIn">
             <div class="table__th-item-popup" v-if="productPopupIsShow">
               <icon-popup-up class="table__th-item-popup-dec"></icon-popup-up>
               <div class="table__th-item-popup-title">Product dimension values</div>
               <img class="table__th-item-popup-img" src="https://uploads-ssl.webflow.com/61b8adc853887c7e8a0e1d78/62ba2feaa4656c5bbae93160_Website%20Final%20Concept%201%201.jpg" alt="">
-              <icon-close @click="handleProductPopup" class="table__th-item-popup-close"></icon-close>
+              <icon-close @click="handleProductPopup()" class="table__th-item-popup-close"></icon-close>
             </div>
           </transition>
         </div>
@@ -64,37 +64,45 @@ export default {
   },
 
   computed: {
-    ...mapWritableState(useStore, ['filterItems', 'currentSortType'])
+    ...mapWritableState(useStore, ['filterItems', 'currentSortType']),
   },
   
   methods: {
+    itemType(type) { 
+      if (type === 'Stiffness') {
+        return 'Carbon_Stiffness'
+      } else if (type === 'Price/m') {
+        return 'Price'
+      } else if (type === 'Weight/m') {
+        return 'Weight'
+      }
+      return type
+    },
+    
     sortItems(type, idx) {  
-      this.currentSortType !== this.keys[idx] ? this.sortCount = 0 : ''
+      if (this.currentSortType !== this.keys[idx]) {
+        this.sortCount = 0
+      }
       this.currentSortType = type
-
-      const itemType = 
-        type === 'Stiffness' ? 'Carbon_Stiffness' :
-        type === 'Price/m' ? 'Price' :
-        type === 'Weight/m' ? 'Weight' : type
 
       if (this.sortCount === 0) {
         return this.filterItems.sort((a, b) => {
           this.sortCount = 1
-          return Number(a[itemType]) < Number(b[itemType]) ? 1 : -1
+          return Number(a[this.itemType(type)]) < Number(b[this.itemType(type)]) ? 1 : -1
         })
       } else {
         return this.filterItems.sort((a, b) => {
           this.sortCount = 0
-          return Number(a[itemType]) > Number(b[itemType]) ? 1 : -1
+          return Number(a[this.itemType(type)]) > Number(b[this.itemType(type)]) ? 1 : -1
         })
       }
     },
 
     handleProductPopup() {
       if (!this.productPopupIsShow) {
-        return this.productPopupIsShow = true
+        this.productPopupIsShow = true
       }
-      return this.productPopupIsShow = false
+      this.productPopupIsShow = false
     }
   }
 }

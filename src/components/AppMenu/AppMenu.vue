@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { mapActions, mapWritableState } from 'pinia'
+import { mapActions, mapState } from 'pinia'
 import { useStore } from '../../stores/index'
 import AppMenuLinks from './AppMenuLinks.vue'
 import IconCheck from '../icons/IconCheck.vue'
@@ -72,7 +72,7 @@ export default {
   },
 
   computed: {
-    ...mapWritableState(useStore, ['fetchItems', 'filterItems', 'tabNames', 'currentTab', 'categoryNames', 'categoryTabs']),
+    ...mapState(useStore, ['fetchItems', 'filterItems', 'tabNames', 'currentTab', 'categoryNames', 'categoryTabs']),
   },
 
   methods: {

@@ -13,16 +13,16 @@ export const helpers = {
   methods: {
     priceFormat(val, price) {
       return new Intl.NumberFormat({}, {
-        style: 'currency', 
+        style: 'currency',
         currency: price,
       }).format(val)
     },
 
     checkMobile() {
       if (window.innerWidth <= 768) {
-        return this.isMobile = true
+        this.isMobile = true
       }
-      return this.isMobile = false
+      this.isMobile = false
     }
   }
 }
