@@ -1,0 +1,22 @@
+@import '../../../../node_modules/@vueform/slider/themes/default.css';
+
+.slider-target {
+	margin-top: 12px;
+}
+
+.slider-horizontal {
+	height: 9px;
+}
+
+.slider-connect {
+	background-color: #c53125;
+}
+
+.slider-handle {
+	top: -6px !important;
+}
+
+.slider-horizontal .slider-handle {
+	border: 1px solid #91979a;
+	box-shadow: none;
+}

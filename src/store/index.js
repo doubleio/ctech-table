@@ -56,19 +56,15 @@ export const useStore = defineStore('main', {
         return this.categoryTabs.includes(item['Laminate'])
       })
 
-      if (result.length === 0) {
-        return
-      }
       this.filterItems = result
     },
 
     handleFilterTabs() {
-      const result = [...this.fetchItems].filter(
-        (item) => this.currentTab.includes(item['Shape'])
-      )
+      const result = [...this.fetchItems].filter((item) => this.currentTab.includes(item['Shape']))
 
       this.filterItems = result
-      return this.handleFilterCategory()
+      this.currentSortType = null
+      return this.goToPage(1)
     },
 
     tabChange(val) {

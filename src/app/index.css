@@ -1,0 +1,8 @@
+@import './styles/normalize.css';
+@import './styles/vars.css';
+@import './styles/global.css';
+
+@import './styles/components/index.css';
+
+@import './styles/tabs/table.css';
+@import './styles/tabs/tabs.css';
