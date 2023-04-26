@@ -26,12 +26,11 @@
 			const cachedData = sessionStorage.getItem('fetchedData')
 			if (cachedData !== null) {
 				this.fetchItems = JSON.parse(cachedData)
-				this.filterItems = JSON.parse(cachedData)
 				this.setCurrentTab()
 				this.loadingStatus = true
-			} else {
-				this.init()
 				sessionStorage.removeItem('loaded')
+			} else {
+				await this.init()
 			}
 		},
 
@@ -51,9 +50,9 @@
 						)
 					this.fetchItems = table
 					this.filterItems = table
-					this.setCurrentTab()
+					await this.setCurrentTab()
 					this.loadingStatus = true
-					sessionStorage.setItem('fetchedData', JSON.stringify(data.data))
+					sessionStorage.setItem('fetchedData', JSON.stringify(table))
 				} catch (error) {
 					this.fetchError = true
 				}

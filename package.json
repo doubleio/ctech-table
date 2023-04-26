@@ -1,7 +1,7 @@
 {
   "name": "ctech-table",
   "version": "0.0.0",
-  "homepage": "",
+  "homepage": "https://doubleio.github.io/ctech-table/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -15,7 +15,6 @@
     "autoprefixer": "^10.4.13",
     "modern-normalize": "^1.1.0",
     "pinia": "^2.0.16",
-    "postcss": "^8.4.19",
     "vue": "^3.2.25"
   },
   "devDependencies": {
