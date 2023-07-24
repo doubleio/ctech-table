@@ -29,79 +29,77 @@ export const useStore = defineStore('main', {
 
   getters: {
     paginatedData() {
-      let tempData = this.filterItems
-      tempData = tempData.slice(
-        (this.page - 1) * this.perPage,
-        this.page * this.perPage
-      )
-      return tempData
+      const start = (this.page - 1) * this.perPage;
+      const end = this.page * this.perPage;
+      return this.filterItems.slice(start, end);
     }
   },
 
   actions: {
     categoryTabChange(val) {
-      let idx = this.categoryTabs.indexOf(val)
+      const idx = this.categoryTabs.indexOf(val);
 
       if (idx !== -1) {
-        return this.categoryTabs.length === 1 ? '' : this.categoryTabs.splice(idx, 1)
+        if (this.categoryTabs.length === 1) {
+          return '';
+        }
+        this.categoryTabs.splice(idx, 1);
       } else {
-        this.categoryTabs.push(val)
+        this.categoryTabs.push(val);
       }
 
-      this.handleFilterCategory()
+      this.handleFilterCategory();
     },
 
     handleFilterCategory() {
-      const result = [...this.filterItems].filter((item) => {
-        return this.categoryTabs.includes(item['Laminate'])
-      })
-
-      this.filterItems = result
+      const result = this.filterItems.filter(item => this.categoryTabs.includes(item['Laminate']));
+      this.filterItems = result;
     },
 
     handleFilterTabs() {
-      const result = [...this.fetchItems].filter((item) => this.currentTab.includes(item['Shape']))
-
-      this.filterItems = result
-      this.currentSortType = null
-      return this.goToPage(1)
+      const result = this.fetchItems.filter(item => this.currentTab.includes(item['Shape']));
+      this.filterItems = result;
+      this.currentSortType = null;
+      this.goToPage(1);
     },
 
     tabChange(val) {
-      let idx = this.currentTab.indexOf(val)
+      const idx = this.currentTab.indexOf(val);
 
       if (idx !== -1) {
-        this.currentTab.length === 1 ? '' : this.currentTab.splice(idx, 1)
+        if (this.currentTab.length === 1) {
+          return '';
+        }
+        this.currentTab.splice(idx, 1);
       } else {
-        this.currentTab.push(val)
+        this.currentTab.push(val);
       }
 
-      this.handleFilterTabs()
-      this.currentSortType = null
-      return this.goToPage(1)
+      this.handleFilterTabs();
+      this.currentSortType = null;
+      this.goToPage(1);
     },
 
     setCurrentTab() {
-      this.tabNames = [...new Set(this.fetchItems.map(item => item['Shape']))]
-      this.categoryNames = [...new Set(this.fetchItems.map(item => item['Laminate']))]
+      this.tabNames = [...new Set(this.fetchItems.map(item => item['Shape']))];
+      this.categoryNames = [...new Set(this.fetchItems.map(item => item['Laminate']))];
 
-      sessionStorage.setItem('ProductNames', JSON.stringify(this.tabNames))
-      sessionStorage.setItem('CategoryNames', JSON.stringify(this.categoryNames))
+      sessionStorage.setItem('ProductNames', JSON.stringify(this.tabNames));
+      sessionStorage.setItem('CategoryNames', JSON.stringify(this.categoryNames));
 
       if (this.tabNames.length !== 0) {
-        let tab = this.tabNames.filter(el => location.pathname.search(el.toLowerCase()) !== -1)[0] || 'Round'
-        this.categoryTabs.push(this.categoryNames[0])
-        this.tabChange(tab)
+        const tab = this.tabNames.find(el => location.pathname.search(el.toLowerCase()) !== -1) || 'Round';
+        this.categoryTabs.push(this.categoryNames[0]);
+        this.tabChange(tab);
       }
 
-      return sessionStorage.setItem('loaded', true)
+      sessionStorage.setItem('loaded', true)
     },
 
     goToPage(numPage) {
-      if (numPage === '...') {
-        return
+      if (numPage !== '...') {
+        this.page = numPage;
       }
-      this.page = numPage
     },
   }
 })

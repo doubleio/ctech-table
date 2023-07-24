@@ -249,6 +249,9 @@
 						})
 						return result
 					})
+					.catch((err) => {
+						return err
+					})
 			},
 
 			convert() {

@@ -65,6 +65,7 @@
 	import IconMenuSquare from '../icons/IconMenu/IconMenuSquare.vue'
 	import IconMenuRectangular from '../icons/IconMenu/IconMenuRectangular.vue'
 	import IconMenuAerofoil from '../icons/IconMenu/IconMenuAerofoil.vue'
+	import { isMobile } from '../../shared/helpers'
 
 	export default {
 		components: {

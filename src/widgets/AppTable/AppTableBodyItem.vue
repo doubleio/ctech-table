@@ -36,7 +36,7 @@
 <script>
 	import { mapState } from 'pinia'
 	import { useStore } from '@/store/index'
-	import { priceFormat } from '@/shared/priceFormat'
+	import { priceFormat } from '@/shared/helpers.js'
 
 	export default {
 		props: {
