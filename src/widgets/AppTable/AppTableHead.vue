@@ -47,25 +47,6 @@
 						</div>
 					</template>
 				</the-accordion-item>
-
-				<the-accordion-item class="table__dd price">
-					<template v-slot:accordion-head>
-						<div class="table__dd-toggle">{{ price }}</div>
-						<icon-accordion class="table__dd-toggle-icon"></icon-accordion>
-					</template>
-					<template v-slot:accordion-body>
-						<div class="table__dd-list price">
-							<div
-								class="table__dd-list-txt"
-								v-for="key in priceOptions"
-								:key="key"
-								@click="setPriceVal(key), convertPriceValue()"
-							>
-								{{ key }}
-							</div>
-						</div>
-					</template>
-				</the-accordion-item>
 			</the-accordion>
 
 			<div class="table__filters-radios-wrapper">
@@ -225,33 +206,6 @@
 				})
 				this.$refs.accordion.accordion.active = null
 				this.handleFilterTabs()
-			},
-
-			setPriceVal(val) {
-				this.oldPrice = this.price
-				this.price = val
-				this.$refs.accordion.accordion.active = null
-			},
-
-			async convertPriceValue() {
-				await fetch(
-					`https://api.exchangerate.host/convert?from=${this.oldPrice}&to=${this.price}&base=${this.priceOptions}`,
-					{
-						method: 'GET',
-					}
-				)
-					.then((res) => {
-						return res.json()
-					})
-					.then((data) => {
-						const result = [...this.fetchItems].map((el, idx, arr) => {
-							return (arr[idx]['Price'] = (el['Price'] * data.info.rate).toFixed(2))
-						})
-						return result
-					})
-					.catch((err) => {
-						return err
-					})
 			},
 
 			convert() {

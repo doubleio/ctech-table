@@ -22,9 +22,6 @@
 			<div>{{ Number(item['Carbon_Stiffness']) }} kNm2</div>
 		</div>
 		<div class="table__th-item">
-			<div>{{ itemPrice(item['Price'], price) }}</div>
-		</div>
-		<div class="table__th-item">
 			<div>{{ Number(item['Weight']) }} {{ weight }}</div>
 		</div>
 		<a href="#modal=open" class="table__th-item center btn" @click="setQueryParams(item)">

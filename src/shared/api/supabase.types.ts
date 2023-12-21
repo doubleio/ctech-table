@@ -3,7 +3,7 @@ export type Json = string | number | boolean | null | { [key: string]: Json } | 
 export interface Database {
 	public: {
 		Tables: {
-			table: {
+			'table [22.12.2023]': {
 				Row: {
 					Aluminium_Stiffness: number | null
 					Autoclave_Cost: string | null

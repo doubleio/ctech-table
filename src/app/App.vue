@@ -44,10 +44,8 @@
 			async init() {
 				try {
 					const { data: table } = await supabase
-						.from('table')
-						.select(
-							'Laminate, Shape, Section, Wall, IDx, IDy, ODx, ODy, Weight, Carbon_Stiffness, Price'
-						)
+						.from('table [22.12.2023]')
+						.select('Laminate, Shape, Section, Wall, IDx, IDy, ODx, ODy, Weight, Carbon_Stiffness')
 					this.fetchItems = table
 					this.filterItems = table
 					await this.setCurrentTab()
