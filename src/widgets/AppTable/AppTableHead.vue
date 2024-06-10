@@ -118,14 +118,6 @@
 						min: 0,
 						step: 1,
 					},
-					{
-						title: 'Outside Diameter',
-						tick: 'ODx',
-						value: [0, 100],
-						max: 100,
-						min: 0,
-						step: 1,
-					},
 				],
 
 				oldPrice: 'NZD',
@@ -213,8 +205,6 @@
 				;[...this.fetchItems].forEach((item) => {
 					item['IDx'] = (item['IDx'] * multiplier).toExponential(2)
 					item['IDy'] = (item['IDy'] * multiplier).toExponential(2)
-					item['ODx'] = (item['ODx'] * multiplier).toExponential(2)
-					item['ODy'] = (item['ODy'] * multiplier).toExponential(2)
 					item['Wall'] = (item['Wall'] * multiplier).toExponential(1)
 
 					const weightMultiplier = this.radio === '0' ? 1 / 2.205 : 2.205

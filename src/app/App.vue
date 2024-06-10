@@ -45,7 +45,7 @@
 				try {
 					const { data: table } = await supabase
 						.from('table [22.12.2023]')
-						.select('Laminate, Shape, Section, Wall, IDx, IDy, ODx, ODy, Weight, Carbon_Stiffness')
+						.select('Laminate, Shape, Section, Wall, IDx, IDy, Weight, Carbon_Stiffness')
 					this.fetchItems = table
 					this.filterItems = table
 					await this.setCurrentTab()

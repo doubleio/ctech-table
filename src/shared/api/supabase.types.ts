@@ -16,8 +16,6 @@ export interface Database {
 					Laminate: string | null
 					Material: number | null
 					Material_Cost: string | null
-					ODx: number | null
-					ODy: number | null
 					Price: number | null
 					Section: string | null
 					Shape: string | null

@@ -72,7 +72,7 @@
 
 		data() {
 			return {
-				keys: ['IDx', 'IDy', 'ODx', 'ODy', 'Wall', 'Stiffness', 'Weight/m'],
+				keys: ['IDx', 'IDy', 'Wall', 'Stiffness', 'Weight/m'],
 				sortCount: 0,
 				productPopupIsShow: false,
 			}

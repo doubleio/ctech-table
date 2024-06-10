@@ -10,12 +10,6 @@
 			<div>{{ Number(item['IDy']) }} {{ parameter }}</div>
 		</div>
 		<div class="table__th-item">
-			<div>{{ Number(item['ODx']) }} {{ parameter }}</div>
-		</div>
-		<div class="table__th-item">
-			<div>{{ Number(item['ODy']) }} {{ parameter }}</div>
-		</div>
-		<div class="table__th-item">
 			<div>{{ Number(item['Wall']) }} {{ parameter }}</div>
 		</div>
 		<div class="table__th-item">
@@ -54,8 +48,6 @@
 					category: this.categoryValue(item['Laminate'] ? item['Laminate'] : null),
 					IDx: Number(item['IDx']) + this.parameter,
 					IDy: Number(item['IDy']) + this.parameter,
-					ODx: Number(item['ODx']) + this.parameter,
-					ODy: Number(item['ODy']) + this.parameter,
 					wall: Number(item['Wall']) + this.parameter,
 					weight: Number(item['Weight']) + this.weight,
 				}
