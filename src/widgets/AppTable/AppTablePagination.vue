@@ -1,5 +1,5 @@
 <template>
-	<div class="table__pagination">
+	<div class="table__pagination" v-if="filterItems.length > 0">
 		<button type="button" class="table__arrow" @click="prevPage" :disabled="isFirstPage">
 			<icon-arrow class="table__arrow-ico"></icon-arrow>
 			<div>Previous</div>

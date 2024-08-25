@@ -1,12 +1,12 @@
 <template>
 	<div class="table__content">
-		<template v-if="filterItems.length !== 0">
+		<template v-if="loadingStatus">
 			<app-table-head></app-table-head>
 			<app-table-body></app-table-body>
 			<app-table-pagination></app-table-pagination>
 		</template>
 
-		<app-table-loader v-else-if="filterItems.length === 0 && !fetchError"></app-table-loader>
+		<app-table-loader v-else-if="!loadingStatus"></app-table-loader>
 		<div v-else>Something went wrong. Reload the page or come back later</div>
 	</div>
 </template>
@@ -24,7 +24,7 @@
 		components: { AppTableHead, AppTableBody, AppTablePagination, AppTableLoader },
 
 		computed: {
-			...mapState(useStore, ['filterItems', 'fetchError']),
+			...mapState(useStore, ['filterItems', 'fetchError', 'loadingStatus']),
 		},
 	}
 </script>

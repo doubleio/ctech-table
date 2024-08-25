@@ -1,60 +1,49 @@
 <template>
 	<div class="table__content-head">
 		<div class="table__filters">
-			<the-accordion ref="accordion">
-				<the-accordion-item
-					v-for="slider in sliders"
-					:key="slider"
-					:isOpen="slider.isOpen"
-					class="table__dd"
-				>
-					<template v-slot:accordion-head>
-						<div class="table__dd-toggle">{{ slider.title }}</div>
-						<icon-accordion class="table__dd-toggle-icon"></icon-accordion>
-					</template>
-					<template v-slot:accordion-body>
-						<div class="table__dd-list list">
-							<div>
-								From {{ slider.value[0].toFixed(2) }} {{ parameter }} to
-								{{ slider.value[1].toFixed(2) }} {{ parameter }}
+			<div class="table__filters">
+				<div v-for="slider in sliders" :key="slider" class="table__dd">
+					<div class="table__dd-title">{{ slider.title }}</div>
+					<div class="">
+						<div class="table__dd-list-values">
+							<div class="table__values-item">
+								<span>min</span>
+								<span class="table__values-item-span"> ({{ parameter }})</span>
+								<InputNumber
+									class="table__values-item-input"
+									v-model="slider.value[0]"
+									:max="slider.max"
+									:min="slider.min"
+									fluid
+                  :minFractionDigits="2"
+                  @update:modelValue="setFilter(slider)"
+								/>
 							</div>
-
-							<r-slider
-								v-model="slider.value"
-								:tooltips="false"
-								:lazy="false"
-								:max="slider.max"
-								:min="slider.min"
-								:format="{ decimals: 2 }"
-								:step="slider.step"
-							></r-slider>
-
-							<div class="table__dd-list-values">
-								<div class="table__values-item">
-									<span>min</span>
-									<div>{{ slider.value[0].toFixed(2) }} ({{ parameter }})</div>
-								</div>
-								<div class="table__values-sep"></div>
-								<div class="table__values-item">
-									<span>max</span>
-									<div>{{ slider.value[1].toFixed(2) }} ({{ parameter }})</div>
-								</div>
-							</div>
-							<div class="table__dd-list-btns">
-								<div @click="clearFilter()">Clear</div>
-								<button @click="setFilter(slider)" class="btn-primary sm color-white">Apply</button>
+							<div class="table__values-sep"></div>
+							<div class="table__values-item">
+								<span>max</span>
+								<span class="table__values-item-span"> ({{ parameter }})</span>
+								<InputNumber
+									class="table__values-item-input"
+									v-model="slider.value[1]"
+									:max="slider.max"
+									:min="slider.min"
+                  :minFractionDigits="2"
+                  @update:modelValue="setFilter(slider)"
+									fluid
+								/>
 							</div>
 						</div>
-					</template>
-				</the-accordion-item>
-			</the-accordion>
+					</div>
+				</div>
+			</div>
 
 			<div class="table__filters-radios-wrapper">
 				<div class="table__filters-radios">
 					<label class="table__filters-radio" v-for="(item, idx) in convertItems" :key="idx">
 						<icon-checkbox
 							class="table__filters-radio-check"
-							:isChecked="radio === item.value ? true : false"
+							:isChecked="radio === item.value"
 						></icon-checkbox>
 						<input
 							type="radio"
@@ -71,6 +60,7 @@
 					</label>
 				</div>
 			</div>
+			<button class="table__filters-btn" @click="clearFilter()">Clear</button>
 		</div>
 
 		<div>
@@ -85,9 +75,10 @@
 	import TheAccordion from '../Accordion/TheAccordion.vue'
 	import TheAccordionItem from '../Accordion/TheAccordionItem.vue'
 	import { mapState, mapWritableState, mapActions } from 'pinia'
-	import { useStore } from '@/store/index'
+	import { useStore } from '../../store/index'
 	import IconCheckbox from '../icons/IconCheckbox.vue'
 	import IconAccordion from '../icons/IconAccordion.vue'
+	import InputNumber from 'primevue/inputnumber'
 
 	export default {
 		components: {
@@ -96,6 +87,7 @@
 			TheAccordionItem,
 			IconCheckbox,
 			IconAccordion,
+			InputNumber,
 		},
 
 		data() {
@@ -147,7 +139,6 @@
 			currentTab: {
 				deep: true,
 				handler() {
-					this.$refs.accordion.accordion.active = null
 					this.setSliderVal()
 				},
 			},
@@ -182,11 +173,10 @@
 			setFilter(slider) {
 				this.handleFilterTabs()
 
-				const result = [...this.filterItems].filter((item) => {
-					return item[slider.tick] >= slider.value[0] && item[slider.tick] <= slider.value[1]
-				})
-
-				this.$refs.accordion.accordion.active = null
+        let result;
+        result = [...this.filterItems].filter((item) => {
+          return item[slider.tick] >= slider.value[0] && item[slider.tick] <= slider.value[1]
+        });
 
 				this.filterItems = result
 			},
@@ -196,7 +186,6 @@
 					slider.value[0] = slider.min
 					slider.value[1] = slider.max
 				})
-				this.$refs.accordion.accordion.active = null
 				this.handleFilterTabs()
 			},
 
@@ -211,7 +200,6 @@
 					item['Weight'] = (item['Weight'] * weightMultiplier).toExponential(2)
 				})
 
-				this.$refs.accordion.accordion.active = null
 				this.setSliderVal()
 				this.parameter = this.radio === '0' ? 'mm' : 'in'
 				this.weight = this.radio === '0' ? 'kg' : 'lb'

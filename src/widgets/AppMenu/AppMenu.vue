@@ -1,6 +1,6 @@
 <template>
 	<div class="table__menu">
-		<div class="table__menu-col1" v-if="filterItems.length !== 0">
+		<div class="table__menu-col1">
 			<div class="fw-700">Select Shape</div>
 			<div class="table__menu-items">
 				<div class="table__tabs">
@@ -26,7 +26,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="table__categories" v-if="categoryNames.length !== 0">
+				<div class="table__categories" v-if="categoryNames">
 					<div class="fw-700">Select Laminate type</div>
 					<div class="table__categories-wrapper">
 						<div
@@ -58,7 +58,7 @@
 
 <script>
 	import { mapActions, mapState } from 'pinia'
-	import { useStore } from '@/store/index'
+	import { useStore } from '../../store/index'
 	import AppMenuLinks from './AppMenuLinks.vue'
 	import IconCheck from '../icons/IconCheck.vue'
 	import IconMenuRound from '../icons/IconMenu/IconMenuRound.vue'
@@ -89,6 +89,7 @@
 		},
 
 		methods: {
+      isMobile,
 			...mapActions(useStore, ['tabChange', 'categoryTabChange']),
 		},
 	}

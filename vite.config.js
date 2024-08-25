@@ -8,7 +8,7 @@ import autoprefixer from 'autoprefixer'
 export default defineConfig({
   plugins: [
     vue(),
-    viteSingleFile()
+    viteSingleFile(),
   ],
   build: {
     base: '/ctech-table/',

@@ -1,55 +1,56 @@
 <template>
-	<div class="table__content-wrapper">
-		<div class="table__th">
-			<div class="table__th-item">
-				<div>Product</div>
-				<div class="table__th-item-ico">
-					<icon-product @click="handleProductPopup()"></icon-product>
-					<transition name="fadeIn">
-						<div class="table__th-item-popup" v-if="productPopupIsShow">
-							<icon-popup-up class="table__th-item-popup-dec"></icon-popup-up>
-							<div class="table__th-item-popup-title">Product dimension values</div>
-							<img
-								class="table__th-item-popup-img"
-								src="https://uploads-ssl.webflow.com/61b8adc853887c7e8a0e1d78/62ba2feaa4656c5bbae93160_Website%20Final%20Concept%201%201.jpg"
-								alt=""
-							/>
-							<icon-close
-								@click="handleProductPopup()"
-								class="table__th-item-popup-close"
-							></icon-close>
-						</div>
-					</transition>
-				</div>
-			</div>
-			<label
-				class="table__th-item sort"
-				v-for="(item, idx) in keys"
-				:key="idx"
-				@click="sortItems(item, idx)"
-			>
-				<div>{{ item }}</div>
-				<div class="table__th-item-icon">
-					<icon-accordion
-						:isColor="currentSortType === item && sortCount !== 0 ? '#B42318' : null"
-					></icon-accordion>
-					<icon-accordion
-						:isColor="currentSortType === item && sortCount !== 1 ? '#B42318' : null"
-					></icon-accordion>
-				</div>
-			</label>
-			<div class="table__th-item center"><div>Action</div></div>
-		</div>
-		<div class="table__content-info">
-			<div class="table__tb">
-				<app-table-body-item
-					v-for="item in paginatedData"
-					:key="item"
-					:item="item"
-				></app-table-body-item>
-			</div>
-		</div>
-	</div>
+    <div v-if="filterItems.length > 0" class="table__content-wrapper">
+      <div class="table__th">
+        <div class="table__th-item">
+          <div>Product</div>
+          <div class="table__th-item-ico">
+            <icon-product @click="handleProductPopup()"></icon-product>
+            <transition name="fadeIn">
+              <div class="table__th-item-popup" v-if="productPopupIsShow">
+                <icon-popup-up class="table__th-item-popup-dec"></icon-popup-up>
+                <div class="table__th-item-popup-title">Product dimension values</div>
+                <img
+                  class="table__th-item-popup-img"
+                  src="https://uploads-ssl.webflow.com/61b8adc853887c7e8a0e1d78/62ba2feaa4656c5bbae93160_Website%20Final%20Concept%201%201.jpg"
+                  alt=""
+                />
+                <icon-close
+                  @click="handleProductPopup()"
+                  class="table__th-item-popup-close"
+                ></icon-close>
+              </div>
+            </transition>
+          </div>
+        </div>
+        <label
+          class="table__th-item sort"
+          v-for="(item, idx) in keys"
+          :key="idx"
+          @click="sortItems(item, idx)"
+        >
+          <div>{{ item }}</div>
+          <div class="table__th-item-icon">
+            <icon-accordion
+              :isColor="currentSortType === item && sortCount !== 0 ? '#B42318' : null"
+            ></icon-accordion>
+            <icon-accordion
+              :isColor="currentSortType === item && sortCount !== 1 ? '#B42318' : null"
+            ></icon-accordion>
+          </div>
+        </label>
+        <div class="table__th-item center"><div>Action</div></div>
+      </div>
+      <div class="table__content-info">
+        <div class="table__tb">
+          <app-table-body-item
+            v-for="item in paginatedData"
+            :key="item"
+            :item="item"
+          ></app-table-body-item>
+        </div>
+      </div>
+    </div>
+  <div v-else class="not-found">No records were found for these filters</div>
 </template>
 
 <script>
@@ -79,7 +80,7 @@
 		},
 
 		computed: {
-			...mapWritableState(useStore, ['filterItems', 'paginatedData', 'currentSortType']),
+			...mapWritableState(useStore, ['filterItems', 'paginatedData', 'currentSortType', 'loadingStatus']),
 		},
 
 		methods: {
@@ -116,7 +117,7 @@
 			},
 
 			handleProductPopup() {
-				this.productPopupIsShow = !this.productPopupIsShow ? true : false
+				this.productPopupIsShow = !this.productPopupIsShow
 			},
 		},
 	}
