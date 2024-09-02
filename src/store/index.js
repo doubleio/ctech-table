@@ -24,6 +24,8 @@ export const useStore = defineStore('main', {
       page: 1,
 
       currentSortType: null,
+
+      isFilterChanged: false
     }
   },
 
@@ -57,14 +59,17 @@ export const useStore = defineStore('main', {
     },
 
     handleFilterTabs() {
+      this.isFilterChanged = true
       const result = this.fetchItems.filter(item => this.currentTab.includes(item['Shape']));
       this.filterItems = result;
       this.currentSortType = null;
       this.goToPage(1);
+      setTimeout(() => this.isFilterChanged = false, 500)
     },
 
     tabChange(val) {
       const idx = this.currentTab.indexOf(val);
+      this.isFilterChanged = true
 
       if (idx !== -1) {
         if (this.currentTab.length === 1) {
@@ -78,6 +83,7 @@ export const useStore = defineStore('main', {
       this.handleFilterTabs();
       this.currentSortType = null;
       this.goToPage(1);
+      setTimeout(() => this.isFilterChanged = false, 500)
     },
 
     setCurrentTab() {

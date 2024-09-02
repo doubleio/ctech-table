@@ -15,8 +15,8 @@
 									:max="slider.max"
 									:min="slider.min"
 									fluid
-                  :minFractionDigits="2"
-                  @update:modelValue="setFilter(slider)"
+									:minFractionDigits="2"
+									@update:modelValue="setFilter(slider)"
 								/>
 							</div>
 							<div class="table__values-sep"></div>
@@ -28,8 +28,8 @@
 									v-model="slider.value[1]"
 									:max="slider.max"
 									:min="slider.min"
-                  :minFractionDigits="2"
-                  @update:modelValue="setFilter(slider)"
+									:minFractionDigits="2"
+									@update:modelValue="setFilter(slider)"
 									fluid
 								/>
 							</div>
@@ -79,6 +79,7 @@
 	import IconCheckbox from '../icons/IconCheckbox.vue'
 	import IconAccordion from '../icons/IconAccordion.vue'
 	import InputNumber from 'primevue/inputnumber'
+	import { watchThrottled } from '@vueuse/core'
 
 	export default {
 		components: {
@@ -171,14 +172,20 @@
 			},
 
 			setFilter(slider) {
-				this.handleFilterTabs()
+				watchThrottled(
+					slider,
+					() => {
+						this.handleFilterTabs()
 
-        let result;
-        result = [...this.filterItems].filter((item) => {
-          return item[slider.tick] >= slider.value[0] && item[slider.tick] <= slider.value[1]
-        });
+						let result
+						result = [...this.filterItems].filter((item) => {
+							return item[slider.tick] >= slider.value[0] && item[slider.tick] <= slider.value[1]
+						})
 
-				this.filterItems = result
+						this.filterItems = result
+					},
+					{ throttle: 500 }
+				)
 			},
 
 			clearFilter() {

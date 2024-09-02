@@ -12,6 +12,7 @@
     "@supabase/supabase-js": "^2.10.0",
     "@vitejs/plugin-vue": "^2.1.0",
     "@vueform/slider": "^2.0.8",
+    "@vueuse/core": "^11.0.3",
     "autoprefixer": "^10.4.13",
     "modern-normalize": "^1.1.0",
     "pinia": "^2.0.16",
