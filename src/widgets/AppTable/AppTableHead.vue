@@ -96,20 +96,20 @@
 				isAccordionOpen: null,
 				sliders: [
 					{
-						title: 'Wall thickness',
-						tick: 'Wall',
-						value: [0, 100],
-						max: 100,
-						min: 0,
-						step: 0.01,
-					},
-					{
 						title: 'Internal Diameter',
 						tick: 'IDx',
 						value: [0, 100],
 						max: 100,
 						min: 0,
 						step: 1,
+					},
+					{
+						title: 'Wall thickness',
+						tick: 'Wall',
+						value: [0, 100],
+						max: 100,
+						min: 0,
+						step: 0.01,
 					},
 				],
 
