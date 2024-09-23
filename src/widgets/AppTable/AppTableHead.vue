@@ -16,7 +16,7 @@
 									:min="slider.min"
 									fluid
 									:minFractionDigits="2"
-									@update:modelValue="setFilter(slider)"
+									@update:modelValue="setFilter"
 								/>
 							</div>
 							<div class="table__values-sep"></div>
@@ -29,7 +29,7 @@
 									:max="slider.max"
 									:min="slider.min"
 									:minFractionDigits="2"
-									@update:modelValue="setFilter(slider)"
+									@update:modelValue="setFilter"
 									fluid
 								/>
 							</div>
@@ -134,6 +134,14 @@
 
 		mounted() {
 			this.setSliderVal()
+
+			watchThrottled(
+				() => this.sliders.map((slider) => slider.value.slice()),
+				() => {
+					this.setFilter()
+				},
+				{ throttle: 500, deep: true }
+			)
 		},
 
 		watch: {
@@ -171,21 +179,16 @@
 				})
 			},
 
-			setFilter(slider) {
-				watchThrottled(
-					slider,
-					() => {
-						this.handleFilterTabs()
+			setFilter() {
+				this.handleFilterTabs()
 
-						let result
-						result = [...this.filterItems].filter((item) => {
-							return item[slider.tick] >= slider.value[0] && item[slider.tick] <= slider.value[1]
-						})
+				let result = this.fetchItems.filter((item) => {
+					return this.sliders.every((slider) => {
+						return item[slider.tick] >= slider.value[0] && item[slider.tick] <= slider.value[1]
+					})
+				})
 
-						this.filterItems = result
-					},
-					{ throttle: 500 }
-				)
+				this.filterItems = result
 			},
 
 			clearFilter() {
