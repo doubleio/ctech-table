@@ -16,7 +16,7 @@
 									:min="slider.min"
 									fluid
 									:minFractionDigits="2"
-									@update:modelValue="setFilter"
+									@update:modelValue="handleFilterItem"
 								/>
 							</div>
 							<div class="table__values-sep"></div>
@@ -29,7 +29,7 @@
 									:max="slider.max"
 									:min="slider.min"
 									:minFractionDigits="2"
-									@update:modelValue="setFilter"
+									@update:modelValue="handleFilterItem"
 									fluid
 								/>
 							</div>
@@ -138,9 +138,9 @@
 			watchThrottled(
 				() => this.sliders.map((slider) => slider.value.slice()),
 				() => {
-					this.setFilter()
+					this.handleFilterItem()
 				},
-				{ throttle: 500, deep: true }
+				{ throttle: 1500, deep: true }
 			)
 		},
 
@@ -159,7 +159,7 @@
 		},
 
 		methods: {
-			...mapActions(useStore, ['handleFilterTabs']),
+			...mapActions(useStore, ['handleFilter']),
 
 			setSliderVal() {
 				this.sliders.forEach((slider) => {
@@ -179,8 +179,8 @@
 				})
 			},
 
-			setFilter() {
-				this.handleFilterTabs()
+			handleFilterItem() {
+				this.handleFilter()
 
 				let result = this.fetchItems.filter((item) => {
 					return this.sliders.every((slider) => {
@@ -196,7 +196,7 @@
 					slider.value[0] = slider.min
 					slider.value[1] = slider.max
 				})
-				this.handleFilterTabs()
+				this.handleFilter()
 			},
 
 			convert() {
