@@ -93,31 +93,30 @@ export const useStore = defineStore('main', {
       this.handleFilter()
     },
 
+
     setCurrentTab() {
-      // Собираем уникальные формы и ламинирование
-      this.tabNames = [...new Set(this.fetchItems.map(item => item.Shape))]
-      this.categoryNames = [...new Set(this.fetchItems.map(item => item.Laminate))]
+      this.tabNames = [...new Set(this.fetchItems.map(item => item.Shape))];
+      this.categoryNames = [...new Set(this.fetchItems.map(item => item.Laminate))];
 
-      sessionStorage.setItem('ProductNames', JSON.stringify(this.tabNames))
-      sessionStorage.setItem('CategoryNames', JSON.stringify(this.categoryNames))
+      sessionStorage.setItem('ProductNames', JSON.stringify(this.tabNames));
+      sessionStorage.setItem('CategoryNames', JSON.stringify(this.categoryNames));
 
-      // Проверяем, что есть хотя бы один элемент, чтобы не пушить undefined
       if (this.tabNames.length) {
-        const foundTab = this.tabNames.find(el =>
-          location.pathname.includes(el.toLowerCase())
-        )
-        // Если ничего не нашли, дефолт - "Round"
-        const tab = foundTab || 'Round'
+        const path = location.pathname.toLowerCase();
+        // Если таб содержит "/", возьми первую часть, иначе само значение
+        const foundTab = this.tabNames.find(el => {
+          const keyword = el.includes('/') ? el.split('/')[0].toLowerCase() : el.toLowerCase();
+          return path.includes(keyword);
+        });
+        const tab = foundTab || 'Round';
 
-        // Аналогично с категориями
         if (this.categoryNames?.length) {
-          this.categoryTabs.push(this.categoryNames[0])
+          this.categoryTabs.push(this.categoryNames[0]);
         }
-
-        this.tabChange(tab)
+        this.tabChange(tab);
       }
 
-      sessionStorage.setItem('loaded', true)
+      sessionStorage.setItem('loaded', true);
     },
 
     goToPage(numPage) {
