@@ -62,9 +62,11 @@ export const useStore = defineStore('main', {
       this.currentSortType = null
       this.goToPage(1)
 
-      if (this.isFilterChanged) {
-        this.isFilterChanged = false
-      }
+      setTimeout(() => {
+        if (this.isFilterChanged) {
+          this.isFilterChanged = false
+        }
+      }, 500)
     },
 
     categoryTabChange(val) {

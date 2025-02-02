@@ -154,7 +154,7 @@
 		},
 
 		computed: {
-			...mapState(useStore, ['paginatedData', 'currentTab']),
+			...mapState(useStore, ['paginatedData', 'currentTab', 'categoryTabs']),
 			...mapWritableState(useStore, ['fetchItems', 'filterItems', 'price', 'parameter', 'weight']),
 		},
 
