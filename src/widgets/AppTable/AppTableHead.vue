@@ -180,14 +180,22 @@
 			},
 
 			handleFilterItem() {
-				this.handleFilter()
-
-				let result = this.fetchItems.filter((item) => {
-					return this.sliders.every((slider) => {
+				const result = this.fetchItems.filter((item) => {
+					// Фильтр по табам и категориям
+					const shape = item.Shape ? item.Shape.toLowerCase() : ''
+					const laminate = item.Laminate ? item.Laminate.toLowerCase() : ''
+					const tabMatch =
+						!this.currentTab.length || this.currentTab.some((tab) => tab.toLowerCase() === shape)
+					const categoryMatch =
+						!this.categoryTabs.length ||
+						this.categoryTabs.some((ct) => ct.toLowerCase() === laminate)
+					// Фильтр по слайдерам
+					const sliderMatch = this.sliders.every((slider) => {
 						return item[slider.tick] >= slider.value[0] && item[slider.tick] <= slider.value[1]
 					})
-				})
 
+					return tabMatch && categoryMatch && sliderMatch
+				})
 				this.filterItems = result
 			},
 

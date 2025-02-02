@@ -44,7 +44,7 @@
 			async init() {
 				try {
 					const { data: table } = await supabase
-						.from('table [22.12.2023]')
+						.from('table')
 						.select('Laminate, Shape, Section, Wall, IDx, IDy, Weight, Carbon_Stiffness')
 					this.fetchItems = table
 					this.filterItems = table

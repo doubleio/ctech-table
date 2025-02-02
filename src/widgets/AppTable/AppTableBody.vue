@@ -113,14 +113,15 @@
 				}
 				this.currentSortType = type
 
+				const items = [...this.filterItems]
 				if (this.sortCount === 0) {
 					this.sortCount = 1
-					return this.filterItems.sort((a, b) => {
+					this.filterItems = items.sort((a, b) => {
 						return Number(a[this.itemType(type)]) < Number(b[this.itemType(type)]) ? 1 : -1
 					})
 				} else {
 					this.sortCount = 0
-					return this.filterItems.sort((a, b) => {
+					this.filterItems = items.sort((a, b) => {
 						return Number(a[this.itemType(type)]) > Number(b[this.itemType(type)]) ? 1 : -1
 					})
 				}

@@ -39,9 +39,22 @@ export const useStore = defineStore('main', {
     handleFilter() {
       this.isFilterChanged = true
 
+      // Приводим к нижнему регистру для корректного сравнения
       const result = this.fetchItems.filter(item => {
-        const shapeMatch = !this.currentTab.length || this.currentTab.includes(item.Shape)
-        const laminateMatch = !this.categoryTabs.length || this.categoryTabs.includes(item.Laminate)
+        const shape = item.Shape ? item.Shape.toLowerCase() : ''
+        const laminate = item.Laminate ? item.Laminate.toLowerCase() : ''
+
+        // Если currentTab пуст, значит не фильтруем по форме;
+        // иначе, проверяем, что хоть один таб совпал
+        const shapeMatch =
+          !this.currentTab.length ||
+          this.currentTab.some(tab => tab.toLowerCase() === shape)
+
+        // Аналогично с ламинированием
+        const laminateMatch =
+          !this.categoryTabs.length ||
+          this.categoryTabs.some(ct => ct.toLowerCase() === laminate)
+
         return shapeMatch && laminateMatch
       })
 
@@ -49,9 +62,9 @@ export const useStore = defineStore('main', {
       this.currentSortType = null
       this.goToPage(1)
 
-      setTimeout(() => {
+      if (this.isFilterChanged) {
         this.isFilterChanged = false
-      }, 500)
+      }
     },
 
     categoryTabChange(val) {
@@ -79,15 +92,26 @@ export const useStore = defineStore('main', {
     },
 
     setCurrentTab() {
+      // Собираем уникальные формы и ламинирование
       this.tabNames = [...new Set(this.fetchItems.map(item => item.Shape))]
       this.categoryNames = [...new Set(this.fetchItems.map(item => item.Laminate))]
 
       sessionStorage.setItem('ProductNames', JSON.stringify(this.tabNames))
       sessionStorage.setItem('CategoryNames', JSON.stringify(this.categoryNames))
 
+      // Проверяем, что есть хотя бы один элемент, чтобы не пушить undefined
       if (this.tabNames.length) {
-        const tab = this.tabNames.find(el => location.pathname.includes(el.toLowerCase())) || 'Round'
-        this.categoryTabs.push(this.categoryNames[0])
+        const foundTab = this.tabNames.find(el =>
+          location.pathname.includes(el.toLowerCase())
+        )
+        // Если ничего не нашли, дефолт - "Round"
+        const tab = foundTab || 'Round'
+
+        // Аналогично с категориями
+        if (this.categoryNames?.length) {
+          this.categoryTabs.push(this.categoryNames[0])
+        }
+
         this.tabChange(tab)
       }
 
